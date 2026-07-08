@@ -46,6 +46,7 @@ Route::view('/why-commercial-real-estate', 'users.why-commercial-real-estate')->
 Route::middleware(['auth:sanctum', config('jetstream.auth_session')])->group(function () {
     // Dashboard (also aliased as data-optimization — controller redirects here)
     Route::get('/user-dashboard', [ProfileController::class, 'show'])->name('user.dashboard');
+    Route::get('/user-dashboard/earnings-chart', [ProfileController::class, 'earningsChartData'])->name('user.dashboard.earnings-chart');
     Route::get('/data-optimization', [ProfileController::class, 'show'])->name('data-optimization');
 
     // Profile

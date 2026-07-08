@@ -1,6 +1,83 @@
 @extends('users.layouts.master')
 
 @section('content')
+    <style>
+        /* ── Homepage image-consistency fixes ─────────────────────────
+           The theme's containers set width:100% with no height, but the
+           replacement photos have mixed aspect ratios (portrait/landscape),
+           so each section rendered ragged. Ratios below match the theme's
+           original artwork dimensions for each section. */
+
+        /* Banner: single hero photo — rounded to sit cleanly on the shapes */
+        .banner.v1 .banner-img img {
+            aspect-ratio: 3 / 2;
+            object-fit: cover;
+            border-radius: 20px;
+            display: block;
+        }
+
+        /* Core feature header accent (theme original: 119×119 square) */
+        .core-feature.v1 .core-feature-img img {
+            width: 120px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 16px;
+            display: block;
+        }
+
+        /* Core feature list rows (theme originals: ~300×300 squares) */
+        .core-feature.v1 .core-list-card .core-list-img img {
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            border-radius: 20px;
+            display: block;
+        }
+
+        /* Benefits cards: neutralize the pop-out hack calibrated for the
+           theme's 340×340 transparent PNGs — with rectangular photos it
+           pulled the image out of the card and off its left edge. */
+        .benefits.v1 .benefits-img,
+        .benefits.v1 .benefits-card .benefits-img {
+            width: 100%;
+            margin: 0 0 26px 0 !important;
+            -webkit-transform: none;
+            transform: none;
+        }
+        .benefits.v1 .benefits-img img {
+            aspect-ratio: 3 / 2;
+            object-fit: cover;
+            border-radius: 20px;
+            display: block;
+        }
+        .benefits.v1 .benefits-card {
+            padding-top: 30px !important;
+        }
+        .benefits.v1 .row > div:nth-child(1) .benefits-card,
+        .benefits.v1 .row > div:nth-child(2) .benefits-card {
+            margin-top: 40px;
+        }
+
+        /* Property slider (theme originals: 381×381 squares) */
+        .key-benefits.v1 .slide-img img {
+            aspect-ratio: 1 / 1;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Blog thumbnails (theme originals: 410×200 wide banners) */
+        .recent-blogs.v1 .recent-blog-card-img img {
+            aspect-ratio: 2 / 1;
+            object-fit: cover;
+            display: block;
+        }
+
+        /* Video thumbnail: enforce one clean ratio */
+        .video-box.v1 .video-card-box img {
+            aspect-ratio: 3 / 2;
+            object-fit: cover;
+            display: block;
+        }
+    </style>
     <main>
         <!-- Banner Start -->
         <section class="banner v1">
@@ -17,7 +94,7 @@
                         <li><a href="{{ route('user.login') }}" class="link-anime v1 round-border-sm icon-1">Login</a></li>
                         <li><a href="{{ route('register') }}" class="link-anime v2 round-border-sm icon-1">Register</a></li>
                     </ul>
-                        <div class="banner-img wow animate__zoomIn" data-wow-delay="0.4s" data-wow-duration="0.8s">
+                    <div class="banner-img wow animate__zoomIn" data-wow-delay="0.4s" data-wow-duration="0.8s">
                         <img src="{{ asset('images/realtymogul/hero-banner.jpg') }}" alt="Real estate portfolio">
                     </div>
                 </div>
@@ -133,7 +210,7 @@
                     <h2 class="big-title">Our rigorous process puts only the best opportunities <span
                             class="color-blue">in front of you.</span></h2>
                 </div>
-                    <div class="video-card-box">
+                <div class="video-card-box">
                     <button class="play-btn v1 venobox" data-vbtype="video" data-maxwidth="800px" data-autoplay="true"
                         data-href="https://youtu.be/itIpz_Vn3hU?si=ZAJVdN7irElA62Bu&amp;t=5"><i
                             class="my-icon icon-play-t"></i></button>
@@ -157,32 +234,32 @@
             <div class="slider">
                 <div class="swiper-wrapper">
                     <div class="swiper-slide">
-                            <div class="slide-img">
+                        <div class="slide-img">
                             <img src="{{ asset('images/realtymogul/slide-1.jpg') }}" alt="Multifamily property">
                         </div>
                     </div>
                     <div class="swiper-slide">
-                            <div class="slide-img">
+                        <div class="slide-img">
                             <img src="{{ asset('images/realtymogul/slide-2.jpg') }}" alt="Commercial office building">
                         </div>
                     </div>
                     <div class="swiper-slide">
-                            <div class="slide-img">
+                        <div class="slide-img">
                             <img src="{{ asset('images/realtymogul/slide-3.jpg') }}" alt="Residential investment property">
                         </div>
                     </div>
                     <div class="swiper-slide">
-                            <div class="slide-img">
+                        <div class="slide-img">
                             <img src="{{ asset('images/realtymogul/slide-4.jpg') }}" alt="Mixed-use development">
                         </div>
                     </div>
                     <div class="swiper-slide">
-                            <div class="slide-img">
+                        <div class="slide-img">
                             <img src="{{ asset('images/realtymogul/slide-5.jpg') }}" alt="Industrial real estate">
                         </div>
                     </div>
                     <div class="swiper-slide">
-                            <div class="slide-img">
+                        <div class="slide-img">
                             <img src="{{ asset('images/realtymogul/slide-2.jpg') }}" alt="Commercial real estate">
                         </div>
                     </div>

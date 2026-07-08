@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 use App\Models\Funds;
 use App\Models\Membership;
 use App\Models\OrderList;
@@ -211,6 +213,108 @@ class ProfileController extends Controller
 
         // Render the dashboard view with prepared data
         return view('users.dashboard', ['userData' => $userData]);
+    }
+
+    /**
+     * JSON earnings series (commission per bucket) for the dashboard chart widget,
+     * for a given date range preset or a custom from/to range.
+     */
+    public function earningsChartData(Request $request)
+    {
+        $validRanges = ['today', 'yesterday', '7d', '30d', 'this_month', 'last_month', 'custom'];
+        $range = $request->input('range', '7d');
+
+        if (!in_array($range, $validRanges, true)) {
+            return response()->json(['error' => 'Invalid range.'], 422);
+        }
+
+        $hourly = false;
+
+        switch ($range) {
+            case 'today':
+                $start = now()->startOfDay();
+                $end = now()->endOfDay();
+                $hourly = true;
+                break;
+            case 'yesterday':
+                $start = now()->subDay()->startOfDay();
+                $end = now()->subDay()->endOfDay();
+                $hourly = true;
+                break;
+            case '7d':
+                $start = now()->subDays(6)->startOfDay();
+                $end = now()->endOfDay();
+                break;
+            case '30d':
+                $start = now()->subDays(29)->startOfDay();
+                $end = now()->endOfDay();
+                break;
+            case 'this_month':
+                $start = now()->startOfMonth();
+                $end = now()->endOfDay();
+                break;
+            case 'last_month':
+                $start = now()->subMonthNoOverflow()->startOfMonth();
+                $end = now()->subMonthNoOverflow()->endOfMonth();
+                break;
+            case 'custom':
+                $from = $request->input('from');
+                $to = $request->input('to');
+
+                if (!$from || !$to) {
+                    return response()->json(['error' => 'Custom range requires from and to dates.'], 422);
+                }
+
+                try {
+                    $start = Carbon::parse($from)->startOfDay();
+                    $end = Carbon::parse($to)->endOfDay();
+                } catch (\Exception $e) {
+                    return response()->json(['error' => 'Invalid date format.'], 422);
+                }
+
+                if ($end->lt($start)) {
+                    return response()->json(['error' => 'The "to" date must be on or after the "from" date.'], 422);
+                }
+
+                if ($start->diffInDays($end) > 366) {
+                    return response()->json(['error' => 'Custom range cannot exceed 366 days.'], 422);
+                }
+
+                $hourly = $start->isSameDay($end);
+                break;
+        }
+
+        $user = Auth::user();
+
+        $rows = $user->funds()
+            ->where('type', 'commission')
+            ->whereIn('status', ['active', 'deactive'])
+            ->whereBetween('created_at', [$start, $end])
+            ->selectRaw($hourly
+                ? "DATE_FORMAT(created_at, '%Y-%m-%d %H:00:00') as bucket_key, SUM(amount) as amount"
+                : 'DATE(created_at) as bucket_key, SUM(amount) as amount')
+            ->groupBy('bucket_key')
+            ->pluck('amount', 'bucket_key');
+
+        $labels = [];
+        $data = [];
+        $period = CarbonPeriod::create($start, $hourly ? '1 hour' : '1 day', $end);
+
+        foreach ($period as $bucketStart) {
+            $key = $hourly ? $bucketStart->format('Y-m-d H:00:00') : $bucketStart->format('Y-m-d');
+            $labels[] = $hourly ? $bucketStart->format('g A') : $bucketStart->format('D n/j');
+            $data[] = (float) ($rows[$key] ?? 0);
+        }
+
+        return response()->json([
+            'range' => $range,
+            'granularity' => $hourly ? 'hour' : 'day',
+            'labels' => $labels,
+            'data' => $data,
+            'total' => round(array_sum($data), 2),
+            'from' => $start->format('Y-m-d'),
+            'to' => $end->format('Y-m-d'),
+        ]);
     }
 
     public function userRegisteration(Request $request)
@@ -533,7 +637,9 @@ class ProfileController extends Controller
 
         // Enforce min/max withdrawal limits from the user's profile
         $minWithdraw = $user->min_withdraw ?? 20;
-        $maxWithdraw = min($user->max_withdraw ?? 2000, $availableBalance);
+        $maxWithdraw = is_numeric($user->max_withdraw)
+            ? min($user->max_withdraw, $availableBalance)
+            : $availableBalance;
 
         $request->validate([
             'amount' => ['required', 'numeric', 'min:'.$minWithdraw, 'max:'.$maxWithdraw],
@@ -596,7 +702,7 @@ class ProfileController extends Controller
         // Validate the incoming request (only required fields for Funds table)
         $request->validate([
             'payment_method' => 'required|string',
-            'amount' => 'required|numeric|min:10|max:5000',
+            'amount' => 'required|numeric|min:10',
         ]);
 
         $user = Auth::user();

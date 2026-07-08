@@ -92,27 +92,40 @@
 {{-- TWO COLUMN: CHART + QUICK STATS --}}
 <div class="dashboard-chart-grid">
 
-    {{-- WEEKLY BAR CHART --}}
+    {{-- EARNINGS CHART --}}
     <div class="card">
         <div class="card-header">
-            <div class="card-title"><span class="icon">📊</span> Weekly Earnings</div>
-            <div style="font-size:12px;color:var(--text-muted);font-family:'Space Mono',monospace;">Last 7 Days</div>
+            <div class="card-title"><span class="icon">📊</span> Earnings</div>
+            <div class="chart-controls">
+                <div class="pill-tabs" id="chartTypeTabs">
+                    <div class="pill-tab active" data-chart-type="line">Line</div>
+                    <div class="pill-tab" data-chart-type="bar">Bar</div>
+                    <div class="pill-tab" data-chart-type="pie">Pie</div>
+                </div>
+                <div class="date-range-picker" id="dateRangePicker">
+                    <button type="button" class="date-range-btn" id="dateRangeBtn">📅 <span id="dateRangeLabel">Last 7 days</span></button>
+                    <div class="date-range-dropdown" id="dateRangeDropdown">
+                        <ul class="date-range-presets">
+                            <li data-preset="today">Today</li>
+                            <li data-preset="yesterday">Yesterday</li>
+                            <li data-preset="7d" class="active">Last 7 days</li>
+                            <li data-preset="30d">Last 30 days</li>
+                            <li data-preset="this_month">This month</li>
+                            <li data-preset="last_month">Last month</li>
+                            <li data-preset="custom">Custom range</li>
+                        </ul>
+                        <div class="date-range-custom" id="dateRangeCustom" style="display:none;">
+                            <input type="date" id="customFrom">
+                            <input type="date" id="customTo">
+                            <button type="button" id="applyCustomRange" class="btn-mini">Apply</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="card-body">
-            <div class="chart-bars">
-                @php $maxEarning = $userData['max_weekly_earning'] ?? 1; @endphp
-                @foreach($userData['weekly_earnings'] ?? [] as $day)
-                    @php
-                        $heightPct = $maxEarning > 0 ? round(($day['amount'] / $maxEarning) * 100) : 0;
-                        $heightPct = ($day['amount'] > 0) ? max($heightPct, 4) : $heightPct;
-                    @endphp
-                    <div class="bar-wrap">
-                        <div class="bar-value">${{ number_format($day['amount'], 0) }}</div>
-                        <div class="bar" data-height="{{ $heightPct }}" style="height:0%"></div>
-                        <div class="bar-label">{{ $day['label'] }}</div>
-                    </div>
-                @endforeach
-            </div>
+            <canvas id="earningsChart" height="160"></canvas>
+            <div class="chart-summary" id="chartSummary"></div>
         </div>
     </div>
 
@@ -215,6 +228,7 @@
 </div>
 
 @push('scripts')
+<script src="{{ asset('admin/assets/libs/chart.js/dist/Chart.min.js') }}"></script>
 <script>
 function handleOptimize(el) {
     if (el.dataset.running === '1') return false;
@@ -227,6 +241,165 @@ function handleOptimize(el) {
     }, 1400);
     return false;
 }
+
+(function() {
+    var earningsChartInstance = null;
+    var currentChartType = 'line';
+    var currentRange = '7d';
+    var lastLabels = [];
+    var lastData = [];
+    var PALETTE = ['#6c47ff', '#00e5ff', '#00d68f', '#ffb800', '#ff6b35', '#8b6bff'];
+
+    var RANGE_LABELS = {
+        today: 'Today',
+        yesterday: 'Yesterday',
+        '7d': 'Last 7 days',
+        '30d': 'Last 30 days',
+        this_month: 'This month',
+        last_month: 'Last month',
+        custom: 'Custom range'
+    };
+
+    function renderChart(labels, data, type) {
+        var canvas = document.getElementById('earningsChart');
+        if (!canvas || typeof Chart === 'undefined') return;
+
+        if (earningsChartInstance) {
+            earningsChartInstance.destroy();
+        }
+
+        earningsChartInstance = new Chart(canvas.getContext('2d'), {
+            type: type,
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Earnings',
+                    data: data,
+                    borderColor: PALETTE[0],
+                    backgroundColor: type === 'pie' ? PALETTE : (type === 'line' ? 'rgba(108,71,255,0.15)' : PALETTE[0]),
+                    fill: type === 'line'
+                }]
+            },
+            options: {
+                legend: { display: type === 'pie' },
+                title: { display: false }
+            }
+        });
+    }
+
+    function updateSummary(total, from, to) {
+        var el = document.getElementById('chartSummary');
+        if (!el) return;
+        var totalStr = '$' + Number(total).toFixed(2);
+        el.textContent = 'Total: ' + totalStr + ' · ' + from + ' – ' + to;
+    }
+
+    function fetchEarnings() {
+        var params = new URLSearchParams({ range: currentRange });
+        if (currentRange === 'custom') {
+            params.set('from', document.getElementById('customFrom').value);
+            params.set('to', document.getElementById('customTo').value);
+        }
+
+        fetch('{{ route('user.dashboard.earnings-chart') }}?' + params.toString())
+            .then(function(r) {
+                if (!r.ok) throw new Error('Request failed');
+                return r.json();
+            })
+            .then(function(json) {
+                lastLabels = json.labels;
+                lastData = json.data;
+                renderChart(lastLabels, lastData, currentChartType);
+                updateSummary(json.total, json.from, json.to);
+            })
+            .catch(function() {
+                if (typeof showToast === 'function') {
+                    showToast('Could not load earnings data.', 'error');
+                }
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Seed the chart from the already-server-rendered 7-day data — no extra round-trip on first paint.
+        var weeklyEarnings = @json($userData['weekly_earnings'] ?? []);
+        lastLabels = weeklyEarnings.map(function(d) { return d.label; });
+        lastData = weeklyEarnings.map(function(d) { return d.amount; });
+        renderChart(lastLabels, lastData, currentChartType);
+
+        // ── Chart-type pill tabs (pure re-render, no network call) ──
+        var chartTypeTabs = document.getElementById('chartTypeTabs');
+        if (chartTypeTabs) {
+            chartTypeTabs.querySelectorAll('.pill-tab').forEach(function(tab) {
+                tab.addEventListener('click', function() {
+                    chartTypeTabs.querySelectorAll('.pill-tab').forEach(function(t) { t.classList.remove('active'); });
+                    tab.classList.add('active');
+                    currentChartType = tab.dataset.chartType;
+                    renderChart(lastLabels, lastData, currentChartType);
+                });
+            });
+        }
+
+        // ── Date-range dropdown open/close ──
+        var dateRangeBtn = document.getElementById('dateRangeBtn');
+        var dateRangeDropdown = document.getElementById('dateRangeDropdown');
+        if (dateRangeBtn && dateRangeDropdown) {
+            dateRangeBtn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                dateRangeDropdown.style.display = dateRangeDropdown.style.display === 'block' ? 'none' : 'block';
+            });
+            dateRangeDropdown.addEventListener('click', function(e) { e.stopPropagation(); });
+            document.addEventListener('click', function() {
+                dateRangeDropdown.style.display = 'none';
+            });
+        }
+
+        // ── Preset selection ──
+        var presetsList = document.querySelector('.date-range-presets');
+        var customBlock = document.getElementById('dateRangeCustom');
+        var dateRangeLabel = document.getElementById('dateRangeLabel');
+        if (presetsList) {
+            presetsList.querySelectorAll('li').forEach(function(item) {
+                item.addEventListener('click', function() {
+                    presetsList.querySelectorAll('li').forEach(function(li) { li.classList.remove('active'); });
+                    item.classList.add('active');
+                    var preset = item.dataset.preset;
+
+                    if (preset === 'custom') {
+                        customBlock.style.display = 'flex';
+                        return;
+                    }
+
+                    customBlock.style.display = 'none';
+                    currentRange = preset;
+                    dateRangeLabel.textContent = RANGE_LABELS[preset];
+                    dateRangeDropdown.style.display = 'none';
+                    fetchEarnings();
+                });
+            });
+        }
+
+        // ── Custom range apply ──
+        var applyCustomRange = document.getElementById('applyCustomRange');
+        if (applyCustomRange) {
+            applyCustomRange.addEventListener('click', function() {
+                var from = document.getElementById('customFrom').value;
+                var to = document.getElementById('customTo').value;
+
+                if (!from || !to || from > to) {
+                    if (typeof showToast === 'function') {
+                        showToast('Please choose a valid date range.', 'error');
+                    }
+                    return;
+                }
+
+                currentRange = 'custom';
+                dateRangeLabel.textContent = from + ' – ' + to;
+                dateRangeDropdown.style.display = 'none';
+                fetchEarnings();
+            });
+        }
+    });
+})();
 </script>
 @endpush
 

@@ -26,7 +26,7 @@
         </div>
         <div class="faq-a">
             <div class="faq-a-inner">
-                RealtyMogul is a task-based earning platform where registered members complete data optimization tasks — rating and reviewing products, services, and locations online. Each completed task earns you a commission. Normal tasks earn a percentage of the task value based on your membership level, while Selected tasks earn a fixed 10% commission. You can withdraw your earnings via JazzCash, EasyPaisa, bank transfer, USDT, or Binance Pay.
+                RealtyMogul is a task-based earning platform. Registered members complete data optimization tasks, rating and reviewing products, services, and locations online, and each completed task earns a commission. Normal tasks earn a percentage of the task value based on your membership level, while Selected tasks earn a fixed 10% commission. You can withdraw your earnings via ACH bank transfer, Zelle, Venmo, PayPal, or debit/credit card.
             </div>
         </div>
     </div>
@@ -38,7 +38,7 @@
         </div>
         <div class="faq-a">
             <div class="faq-a-inner">
-                Registration is completely free. Simply click the Register button, fill in your name, email, phone number, and password. You'll start on the free Bronze membership which gives you access to 10 normal tasks per day. To unlock more tasks and higher commissions, you can upgrade your membership at any time from the Membership section.
+                Registration is completely free. Simply click the Register button, fill in your name, email, phone number, and password. You'll start on the Silver membership, which gives you 35 tasks a day at a 0.70% commission rate. To unlock more tasks and a higher commission rate, you can upgrade your membership at any time from the Membership section.
             </div>
         </div>
     </div>
@@ -50,8 +50,8 @@
         </div>
         <div class="faq-a">
             <div class="faq-a-inner">
-                <strong style="color:var(--text);">Normal Tasks</strong> are standard tasks available to all members. Your commission rate depends on your membership level — Bronze: 0.5%, Silver: 0.7%, Gold: 0.9%, Diamond: 1.2% of the task value.<br><br>
-                <strong style="color:var(--warning);">⭐ Selected Tasks</strong> are premium tasks assigned to members based on their membership level. They carry a <strong>fixed 10% commission</strong> regardless of membership tier — making them significantly more valuable. Gold members get 5 selected tasks per day; Silver gets 3; Diamond gets unlimited.
+                <strong style="color:var(--text);">Normal Tasks</strong> are the standard tasks every member has access to. Your commission depends on your membership level: Silver earns 0.70%, Gold earns 0.80%, and Platinum earns 1% of the task value.<br><br>
+                <strong style="color:var(--warning);">Selected Tasks</strong> are higher-value tasks assigned individually. They pay a <strong>fixed 10% commission</strong> no matter your tier, which makes them worth more per task.
             </div>
         </div>
     </div>
@@ -65,9 +65,9 @@
         <div class="faq-a">
             <div class="faq-a-inner">
                 Your commission rate depends on your membership level and the type of task:<br><br>
-                • <strong>Normal Tasks:</strong> Bronze 0.5% · Silver 0.7% · Gold 0.9% · Diamond 1.2%<br>
+                • <strong>Normal Tasks:</strong> Silver 0.70% · Gold 0.80% · Platinum 1%<br>
                 • <strong>Selected Tasks:</strong> Fixed 10% for all membership levels<br><br>
-                Example: A normal task worth $500 on Gold membership earns $4.50. A selected task worth $2,000 earns $200.00 regardless of your level.
+                Example: A normal task worth $500 on Gold membership earns $4.00. A selected task worth $2,000 earns $200.00 regardless of your level.
             </div>
         </div>
     </div>
@@ -79,7 +79,7 @@
         </div>
         <div class="faq-a">
             <div class="faq-a-inner">
-                Selected tasks are high-value assignments that carry a guaranteed 10% commission on the full task value. This rate is fixed — it does not vary based on your membership level. For example, a selected task with a value of $5,000 earns exactly $500 in commission. Selected tasks are limited in number and assigned daily based on your membership tier.
+                Selected tasks are high-value assignments that carry a guaranteed 10% commission on the full task value. This rate is fixed and doesn't change based on your membership level. For example, a selected task with a value of $5,000 earns exactly $500 in commission. Selected tasks are limited in number and assigned individually.
             </div>
         </div>
     </div>
@@ -91,7 +91,7 @@
         </div>
         <div class="faq-a">
             <div class="faq-a-inner">
-                Each registered member receives a unique referral link. When someone registers using your link and starts completing tasks, you earn a percentage of every commission they receive — passively and automatically. Your referral earnings are credited to your wallet balance and can be withdrawn at any time. The referral bonus rate varies and is shown in your referrals dashboard.
+                You get a unique referral link when you register. Anyone who signs up through it and starts completing tasks earns you a cut of their commissions automatically, with nothing extra required from you. That money lands in your wallet balance and you can withdraw it whenever you like. Your exact referral rate is shown on your referrals dashboard.
             </div>
         </div>
     </div>
@@ -116,7 +116,7 @@
         </div>
         <div class="faq-a">
             <div class="faq-a-inner">
-                The minimum withdrawal amount is <strong style="color:var(--text);">$20 USD</strong> for all payment methods except Bank Transfer, which requires a minimum of $50. There is no maximum daily withdrawal limit for Gold and Diamond members, though individual transactions are capped at $2,000 for security purposes.
+                The minimum withdrawal amount is <strong style="color:var(--text);">$20 USD</strong> for all payment methods. There's no maximum on how much you can withdraw.
             </div>
         </div>
     </div>
@@ -128,13 +128,12 @@
         </div>
         <div class="faq-a">
             <div class="faq-a-inner">
-                We support the following payment methods for both recharge and withdrawal:<br><br>
-                📱 <strong>JazzCash</strong> — Instant processing<br>
-                💚 <strong>EasyPaisa</strong> — Instant processing<br>
-                🏦 <strong>Bank Transfer</strong> (HBL, MCB, UBL, Meezan, and others) — 1–3 business days<br>
-                💎 <strong>USDT TRC20</strong> — ~10 minutes<br>
-                🟡 <strong>Binance Pay</strong> — Instant<br>
-                🏛️ <strong>HBL Direct</strong> — 1–2 business days
+                You can use any of these for both adding funds and withdrawing:<br><br>
+                <strong>ACH (Bank Transfer):</strong> 1–3 business days<br>
+                <strong>Zelle:</strong> instant<br>
+                <strong>Venmo:</strong> instant<br>
+                <strong>PayPal:</strong> instant<br>
+                <strong>Debit / Credit Card:</strong> instant
             </div>
         </div>
     </div>
@@ -146,7 +145,7 @@
         </div>
         <div class="faq-a">
             <div class="faq-a-inner">
-                Most withdrawals are processed within <strong style="color:var(--text);">24 hours</strong> of submission on business days. JazzCash, EasyPaisa, and Binance Pay are typically faster. Bank transfers and USDT may take slightly longer depending on network conditions. Withdrawals submitted after 6 PM PKT may be processed on the next business day.
+                Most withdrawals are processed within <strong style="color:var(--text);">24 hours</strong> of submission on business days. Zelle, Venmo, PayPal, and card withdrawals are typically faster. ACH bank transfers may take slightly longer to fully settle. Withdrawals submitted after 6 PM ET may be processed on the next business day.
             </div>
         </div>
     </div>
@@ -158,12 +157,7 @@
         </div>
         <div class="faq-a">
             <div class="faq-a-inner">
-                Withdrawal fees are as follows:<br><br>
-                • JazzCash &amp; EasyPaisa: <strong style="color:var(--warning);">2%</strong> of withdrawal amount<br>
-                • Bank Transfer: <strong style="color:var(--warning);">2%</strong> of withdrawal amount<br>
-                • USDT TRC20: <strong style="color:var(--warning);">1%</strong> of withdrawal amount<br>
-                • Binance Pay: <strong style="color:var(--warning);">1%</strong> of withdrawal amount<br><br>
-                The fee is deducted from your withdrawal amount before processing. The net amount you receive is shown in the fee breakdown on the Withdrawal page.
+                There are no withdrawal fees on any supported payment method. The full amount you request is the amount you receive, as shown in the fee breakdown on the Withdrawal page.
             </div>
         </div>
     </div>
@@ -176,12 +170,11 @@
         </div>
         <div class="faq-a">
             <div class="faq-a-inner">
-                Your daily task limit is determined by your membership level:<br><br>
-                🥉 <strong>Bronze (Free):</strong> 10 normal tasks/day · No selected tasks<br>
-                🥈 <strong>Silver ($20):</strong> 20 normal tasks/day · 3 selected tasks/day<br>
-                🥇 <strong>Gold ($49):</strong> 30 normal tasks/day · 5 selected tasks/day<br>
-                💎 <strong>Diamond ($149):</strong> Unlimited normal tasks · Unlimited selected tasks<br><br>
-                Task limits reset at midnight PKT every day.
+                It depends on your membership level:<br><br>
+                <strong>Silver:</strong> 35 tasks a day at a 0.70% commission rate<br>
+                <strong>Gold:</strong> 45 tasks a day at a 0.80% commission rate<br>
+                <strong>Platinum:</strong> 50 tasks a day at a 1% commission rate<br><br>
+                Limits reset at midnight PKT every day.
             </div>
         </div>
     </div>
@@ -193,7 +186,7 @@
         </div>
         <div class="faq-a">
             <div class="faq-a-inner">
-                Task submissions are reviewed by our system automatically. If a task submission does not meet quality standards or contains errors, it may be marked as Failed — and the commission will not be credited. Repeated intentional incorrect submissions may result in account warnings or suspension. If you believe a task was incorrectly marked as failed, contact our support team with the task ID.
+                Task submissions are reviewed by our system automatically. If a task submission does not meet quality standards or contains errors, it may be marked as Failed, and the commission won't be credited. Repeated intentional incorrect submissions may result in account warnings or suspension. If you believe a task was incorrectly marked as failed, contact our support team with the task ID.
             </div>
         </div>
     </div>
@@ -218,7 +211,7 @@
         </div>
         <div class="faq-a">
             <div class="faq-a-inner">
-                You can upgrade your membership at any time from the Membership section of your dashboard. Payment for membership upgrades can be made using any supported recharge method (JazzCash, EasyPaisa, Bank Transfer, USDT, Binance Pay). Membership is activated immediately after payment is verified. Upgrades are non-refundable.
+                You can upgrade your membership at any time from the Membership section of your dashboard. Payment for membership upgrades can be made using any supported recharge method (ACH, Zelle, Venmo, PayPal, or card). Membership is activated immediately after payment is verified. Upgrades are non-refundable.
             </div>
         </div>
     </div>
@@ -240,10 +233,9 @@
 {{-- STILL HAVE QUESTIONS --}}
 <div class="card" style="margin-top:24px;text-align:center;">
     <div class="card-body" style="padding:32px;">
-        <div style="font-size:32px;margin-bottom:12px;">🤔</div>
         <h3 style="font-size:18px;font-weight:700;color:var(--text);margin:0 0 8px;">Still Have Questions?</h3>
         <p style="font-size:13.5px;color:var(--text-muted);margin:0 0 20px;">Our support team is available 24/7 to help you.</p>
-        <a href="{{ route('user.support') }}" class="btn btn-primary" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;">🎧 Open a Support Ticket</a>
+        <a href="{{ route('user.support') }}" class="btn btn-primary" style="display:inline-flex;align-items:center;justify-content:center;gap:8px;">Open a Support Ticket</a>
     </div>
 </div>
 

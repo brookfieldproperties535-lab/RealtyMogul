@@ -72,11 +72,10 @@
                             <span
                                 style="position:absolute;left:14px;font-size:15px;color:var(--text-muted);font-family:'Space Mono',monospace;font-weight:700;">$</span>
                             <input type="number" id="amountInput" name="amount" class="form-input amount-input"
-                                placeholder="0.00" min="10" max="5000" step="0.01" style="padding-left:30px;"
+                                placeholder="0.00" min="10" step="0.01" style="padding-left:30px;"
                                 value="{{ old('amount') }}">
                         </div>
-                        <div style="font-size:11px;color:var(--text-muted);margin-top:5px;">Minimum: $10 &nbsp;·&nbsp;
-                            Maximum: $5,000</div>
+                        <div style="font-size:11px;color:var(--text-muted);margin-top:5px;">Minimum: $10</div>
                         @error('amount')
                             <div class="error-message">{{ $message }}</div>
                         @enderror

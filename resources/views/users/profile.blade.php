@@ -59,6 +59,33 @@
         </div>
     </div>
 
+    <div class="card" style="margin-bottom:22px;">
+        <div class="card-header">
+            <div class="card-title"><span class="icon">🔗</span> Referral Details</div>
+        </div>
+        <div class="card-body">
+            <div style="margin-bottom:14px;">
+                <div
+                    style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);font-weight:600;margin-bottom:6px;">
+                    Referral Code</div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                    <code
+                        style="background:var(--dark2);border:1px solid var(--border);border-radius:6px;padding:6px 12px;font-size:13px;color:var(--accent);flex:1;font-family:'Space Mono',monospace;">{{ $user->reference_code ?? '-' }}</code>
+                    <button class="btn-copy" data-copy="{{ $user->reference_code ?? '' }}">Copy</button>
+                </div>
+            </div>
+            <div>
+                <div
+                    style="font-size:11px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);font-weight:600;margin-bottom:6px;">
+                    Referral Link</div>
+                <div class="ref-link-box">
+                    <span class="ref-link-url">{{ url('/ref/' . ($user->reference_code ?? '')) }}</span>
+                    <button class="btn-copy"
+                        data-copy="{{ url('/ref/' . ($user->reference_code ?? '')) }}">📋</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     {{-- TWO COLUMN --}}
     <div class="two-column-grid">
@@ -137,43 +164,6 @@
 
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title"><span class="icon">📊</span> Account Info</div>
-                </div>
-                <div class="card-body">
-                    <div style="display:flex;flex-direction:column;gap:0;">
-                        <div
-                            style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px;">
-                            <span style="color:var(--text-muted);">Member Since</span>
-                            <span
-                                style="font-weight:600;">{{ optional($user->created_at)->format('M d, Y') ?? '-' }}</span>
-                        </div>
-                        <div
-                            style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px;">
-                            <span style="color:var(--text-muted);">Membership</span>
-                            <span
-                                style="font-weight:600;color:var(--warning);">{{ $membership->level_name ?? ($membership->name ?? 'Member') }}</span>
-                        </div>
-                        <div
-                            style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px;">
-                            <span style="color:var(--text-muted);">Total Referrals</span>
-                            <span
-                                style="font-weight:600;">{{ $user->referrals_count ?? (optional($user->referrals)->count() ?? 0) }}</span>
-                        </div>
-                        <div style="display:flex;justify-content:space-between;padding:11px 0;font-size:13px;">
-                            <span style="color:var(--text-muted);">Credibility</span>
-                            <div class="credibility-wrap">
-                                <div class="credibility-track" data-cred="{{ $user->credibility ?? 0 }}">
-                                    <div class="credibility-fill"></div>
-                                </div>
-                                <div class="credibility-value">{{ $user->credibility ?? 0 }}%</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div class="card-header">
                     <div class="card-title"><span class="icon">🔗</span> Referral Details</div>
                 </div>
                 <div class="card-body">
@@ -200,6 +190,42 @@
                 </div>
             </div>
 
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title"><span class="icon">📊</span> Account Info</div>
+            </div>
+            <div class="card-body">
+                <div style="display:flex;flex-direction:column;gap:0;">
+                    <div
+                        style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px;">
+                        <span style="color:var(--text-muted);">Member Since</span>
+                        <span
+                            style="font-weight:600;">{{ optional($user->created_at)->format('M d, Y') ?? '-' }}</span>
+                    </div>
+                    <div
+                        style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px;">
+                        <span style="color:var(--text-muted);">Membership</span>
+                        <span
+                            style="font-weight:600;color:var(--warning);">{{ $membership->level_name ?? ($membership->name ?? 'Member') }}</span>
+                    </div>
+                    <div
+                        style="display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid var(--border);font-size:13px;">
+                        <span style="color:var(--text-muted);">Total Referrals</span>
+                        <span
+                            style="font-weight:600;">{{ $user->referrals_count ?? (optional($user->referrals)->count() ?? 0) }}</span>
+                    </div>
+                    <div style="display:flex;justify-content:space-between;padding:11px 0;font-size:13px;">
+                        <span style="color:var(--text-muted);">Credibility</span>
+                        <div class="credibility-wrap">
+                            <div class="credibility-track" data-cred="{{ $user->credibility ?? 0 }}">
+                                <div class="credibility-fill"></div>
+                            </div>
+                            <div class="credibility-value">{{ $user->credibility ?? 0 }}%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
         </div>
     </div>
 

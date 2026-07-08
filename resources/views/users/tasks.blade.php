@@ -10,7 +10,6 @@
     $onHold        = $onHoldOrders       ?? collect();
     $oneIncomplete = $oneIncompleteOrder ?? null;
     $membershipObj = $membership         ?? null;
-    $commRate      = ($membershipObj->commission ?? 0) / 100;
     $userFunds     = $funds              ?? 0;
 
     $pendingCount   = $oneIncomplete ? 1 : 0;
@@ -50,7 +49,7 @@
     @if ($oneIncomplete)
         @php
             $price = $oneIncomplete->orderList->price ?? 0;
-            $comm  = $price * $commRate;
+            $comm  = $pendingCommission ?? 0;
             $total = $price + $comm;
         @endphp
         <div class="task-detail-card">
@@ -200,7 +199,7 @@
     @if ($oneIncomplete)
         @php
             $price = $oneIncomplete->orderList->price ?? 0;
-            $comm  = $price * $commRate;
+            $comm  = $pendingCommission ?? 0;
             $total = $price + $comm;
         @endphp
         <div class="task-detail-card">

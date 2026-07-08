@@ -165,15 +165,11 @@
                     </div>
                 </div>
 
-                {{-- Notification Bell --}}
-                <div class="topbar-icon-btn notif-btn" id="notifBtn" title="Notifications"
-                    style="position:relative;">
-                    🔔
-                    <span class="notif-dot"
-                        style="position:absolute;top:4px;right:4px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid var(--dark2);"></span>
-                    <span
-                        style="position:absolute;top:2px;right:2px;background:var(--danger);color:#fff;font-size:9px;font-weight:700;border-radius:10px;padding:1px 4px;min-width:14px;text-align:center;">{{ $notificationsCount ?? 0 }}</span>
-                </div>
+                {{-- Support --}}
+                <a href="{{ route('user.support') }}" class="topbar-icon-btn" id="supportBtn" title="Support"
+                    style="text-decoration:none;">
+                    🎧
+                </a>
 
                 {{-- User Dropdown --}}
                 <div class="topbar-user-wrap" style="position:relative;">

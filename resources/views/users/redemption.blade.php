@@ -311,7 +311,7 @@
             <ul style="padding-left:18px;margin:0;display:flex;flex-direction:column;gap:8px;">
                 <li style="font-size:12.5px;color:var(--text-muted);line-height:1.6;">Ensure your payment details are accurate before submitting</li>
                 <li style="font-size:12.5px;color:var(--text-muted);line-height:1.6;">Minimum withdrawal is <strong style="color:var(--text);">${{ number_format($minWithdraw, 2) }}</strong></li>
-                <li style="font-size:12.5px;color:var(--text-muted);line-height:1.6;">Maximum single withdrawal is <strong style="color:var(--text);">${{ number_format($maxWithdraw, 2) }}</strong></li>
+                <li style="font-size:12.5px;color:var(--text-muted);line-height:1.6;">Maximum single withdrawal: <strong style="color:var(--text);">No limit</strong></li>
                 <li style="font-size:12.5px;color:var(--text-muted);line-height:1.6;">Rejected withdrawals are refunded within 24 hours</li>
             </ul>
         </div>

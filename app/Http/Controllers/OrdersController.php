@@ -185,8 +185,10 @@ class OrdersController extends Controller
             $order->type = 'Complete';
             $order->save();
 
-            // Get the commission from the form
-            $commission = $request->input('commission');
+            // Commission is derived from the order's own total_amount (set correctly at
+            // generation time in index()), never from client input — the form's hidden
+            // "commission" field is untrusted and ignored.
+            $commission = $order->total_amount - optional($order->orderList)->price;
 
             // Create a new fund record for the commission for the current user
             $user->funds()->create([
@@ -293,15 +295,18 @@ class OrdersController extends Controller
         // Fetch the user's membership details
         $membership = auth()->user()->membershipLevel;
 
-        // Fetch the selected orders for the user, if any
-        $selectedOrders = SelectedOrder::where('user_id', $userId)->get();
-        $selectedOrderIds = $selectedOrders->pluck('order_list_id')->flatten()->toArray();
-
         // Fetch the one incomplete order
         $oneIncompleteOrder = Orders::where('user_id', $userId)
                                     ->where('type', 'Incomplete')
                                     ->where('status', 'active')
                                     ->first();
+
+        // Commission for the pending order is derived from its own total_amount (set
+        // correctly at generation time in index()), not recomputed from the membership
+        // rate — that would be wrong for admin-assigned Selected orders.
+        $pendingCommission = $oneIncompleteOrder
+            ? $oneIncompleteOrder->total_amount - optional($oneIncompleteOrder->orderList)->price
+            : 0;
 
         // Fetch completed orders, ordered by 'id' in descending order
         $completedOrders = Orders::where('user_id', $userId)
@@ -309,18 +314,16 @@ class OrdersController extends Controller
                                 ->where('status', 'active')
                                 ->orderBy('id', 'desc')  // Order by descending 'id'
                                 ->get()
-                                ->map(function ($order) use ($selectedOrderIds, $membership) {
+                                ->map(function ($order) {
                                     $orderPrice = $order->orderList->price;
-                                    $commissionRate = in_array($order->orderList->id, $selectedOrderIds) ? 0.27 : ($membership->commission / 100);
-                                    $commission = $orderPrice * $commissionRate;
-                                    $totalAmount = $orderPrice + $commission;
+                                    $commission = $order->total_amount - $orderPrice;
 
                                     return [
                                         'title' => $order->orderList->title,
                                         'price' => $orderPrice,
                                         'commission' => $commission,
                                         'created_at' => $order->created_at->format('Y-m-d'),
-                                        'totalPrice' => $totalAmount,
+                                        'totalPrice' => $order->total_amount,
                                         'image' => $order->orderList->image,
                                         'status' => $order->type,
                                     ];
@@ -331,24 +334,22 @@ class OrdersController extends Controller
                             ->where('type', 'Incomplete')
                             ->where('status', 'active')
                             ->get()
-                            ->map(function ($order) use ($selectedOrderIds, $membership) {
+                            ->map(function ($order) {
                                 $orderPrice = $order->orderList->price;
-                                $commissionRate = in_array($order->orderList->id, $selectedOrderIds) ? 0.27 : ($membership->commission / 100);
-                                $commission = $orderPrice * $commissionRate;
-                                $totalAmount = $orderPrice + $commission;
+                                $commission = $order->total_amount - $orderPrice;
 
                                 return [
                                     'title' => $order->orderList->title,
                                     'price' => $orderPrice,
                                     'commission' => $commission,
                                     'created_at' => $order->created_at->format('Y-m-d'),
-                                    'totalPrice' => $totalAmount,
+                                    'totalPrice' => $order->total_amount,
                                     'image' => $order->orderList->image,
                                     'status' => $order->type,
                                 ];
                             });
 
-        return view('users.tasks', compact('oneIncompleteOrder', 'completedOrders', 'onHoldOrders', 'funds', 'selectedOrderIds', 'membership'));
+        return view('users.tasks', compact('oneIncompleteOrder', 'pendingCommission', 'completedOrders', 'onHoldOrders', 'funds', 'membership'));
     }
 
     public function processOrder(Request $request)
@@ -373,8 +374,10 @@ class OrdersController extends Controller
             $order->type = 'Complete';
             $order->save();
 
-            // Get the commission from the form
-            $commission = $request->input('commission');
+            // Commission is derived from the order's own total_amount (set correctly at
+            // generation time in index()), never from client input — the form's hidden
+            // "commission" field is untrusted and ignored.
+            $commission = $order->total_amount - optional($order->orderList)->price;
 
             // Create a new fund record for the commission for the current user
             $user->funds()->create([
