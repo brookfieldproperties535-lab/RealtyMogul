@@ -38,7 +38,7 @@
                                         <div class="box-icon">
                                             <i class="my-icon icon-massage"></i>
                                         </div>
-                                        <h6 class="list-title">bhello@fincatch.com</h6>
+                                        <h6 class="list-title">support@realtymogul.live</h6>
                                     </li>
                                     <li>
                                         <div class="box-icon">

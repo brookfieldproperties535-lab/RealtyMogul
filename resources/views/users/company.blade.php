@@ -65,7 +65,7 @@
         <div style="display:flex;flex-direction:column;gap:12px;">
             <div>
                 <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);font-weight:600;margin-bottom:2px;">Email</div>
-                <div style="font-size:14px;color:var(--text);font-weight:500;">support@realtymogul.app</div>
+                <div style="font-size:14px;color:var(--text);font-weight:500;">support@realtymogul.live</div>
             </div>
             <div>
                 <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);font-weight:600;margin-bottom:2px;">Phone</div>

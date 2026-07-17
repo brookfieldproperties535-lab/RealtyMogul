@@ -160,7 +160,7 @@
 
                 <div class="info-card">
                     💬 Need help? Contact support:<br>
-                    <strong style="color:var(--accent);">support@realtymogul.app</strong><br>
+                    <strong style="color:var(--accent);">support@realtymogul.live</strong><br>
                     Phone: <strong style="color:var(--success);">+1 (800) 555-0174</strong>
                 </div>
             </div>

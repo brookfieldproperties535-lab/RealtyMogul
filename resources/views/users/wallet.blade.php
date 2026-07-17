@@ -269,10 +269,10 @@
                     <div class="wallet-ref-sub">Your Referral Link</div>
                     <div class="wallet-ref-link-row">
                         <div class="wallet-ref-code">
-                            https://realtymogul.app/ref/{{ strtoupper(substr(auth()->user()->name ?? 'USER', 0, 5)) }}{{ auth()->user()->id ?? '001' }}
+                            https://realtymogul.live/ref/{{ strtoupper(substr(auth()->user()->name ?? 'USER', 0, 5)) }}{{ auth()->user()->id ?? '001' }}
                         </div>
                         <button class="btn-copy btn btn-primary btn-sm"
-                                data-copy="https://realtymogul.app/ref/{{ strtoupper(substr(auth()->user()->name ?? 'USER', 0, 5)) }}{{ auth()->user()->id ?? '001' }}">
+                                data-copy="https://realtymogul.live/ref/{{ strtoupper(substr(auth()->user()->name ?? 'USER', 0, 5)) }}{{ auth()->user()->id ?? '001' }}">
                             📋 Copy
                         </button>
                     </div>

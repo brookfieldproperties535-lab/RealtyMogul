@@ -68,7 +68,7 @@
             Important: Abuse of the platform, including fraudulent submissions or chargeback abuse, may lead to account termination and forfeiture of balances.
         </div>
 
-        <p style="margin-top:18px;color:var(--text-muted);font-size:13px;">If you have questions about these Terms, contact support@realtymogul.app.</p>
+        <p style="margin-top:18px;color:var(--text-muted);font-size:13px;">If you have questions about these Terms, contact support@realtymogul.live.</p>
     </section>
 
 </div>

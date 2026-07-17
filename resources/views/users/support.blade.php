@@ -41,7 +41,7 @@
     <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;max-width:700px;margin:0 auto 40px;padding:0 20px;">
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center;">
             <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);font-weight:600;margin-bottom:6px;">Email</div>
-            <div style="font-size:13px;font-weight:600;color:var(--text);word-break:break-all;">support@realtymogul.app</div>
+            <div style="font-size:13px;font-weight:600;color:var(--text);word-break:break-all;">support@realtymogul.live</div>
         </div>
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px;text-align:center;">
             <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--text-muted);font-weight:600;margin-bottom:6px;">Live Chat</div>
@@ -88,7 +88,7 @@
         }
 
         // Last resort: widget not loaded (e.g. no widget ID configured yet).
-        alert('Live chat is not available right now. Please email support@realtymogul.app');
+        alert('Live chat is not available right now. Please email support@realtymogul.live');
     }
 </script>
 
