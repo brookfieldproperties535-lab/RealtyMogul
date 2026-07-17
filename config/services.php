@@ -36,7 +36,9 @@ return [
     ],
 
     'chatway' => [
-        'widget_id' => env('CHATWAY_WIDGET_ID'),
+        // Public client-side widget ID (appears in the page source anyway). Committed
+        // as the default so the widget works on any deploy; override via .env if needed.
+        'widget_id' => env('CHATWAY_WIDGET_ID', 'IMgRNJJtuErZ'),
     ],
 
 ];
