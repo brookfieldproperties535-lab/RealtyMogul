@@ -13,7 +13,30 @@
         </div>
     @endif
 
-    @if (isset($wallet) && $wallet)
+    @if (auth()->user()->wallet_status !== 'active')
+
+        {{-- Wallet deactive — block add/view until support activates it --}}
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title"><span class="icon">💳</span> Wallet</div>
+                <span class="status-badge status-pending">Deactive</span>
+            </div>
+            <div class="card-body" style="text-align:center;padding:36px 28px;">
+                <div style="font-size:40px;margin-bottom:14px;">🔒</div>
+                <h3 style="font-size:17px;font-weight:700;color:var(--text);margin:0 0 10px;">Your Wallet Is Not Active</h3>
+                <p style="font-size:13.5px;color:var(--text-muted);line-height:1.7;margin:0 0 22px;">
+                    Your wallet status is currently <strong style="color:var(--danger);">deactive</strong>.
+                    Please contact support and pay the activation fee to add your wallet
+                    information for future withdrawals.
+                </p>
+                <a href="{{ route('user.support') }}" class="btn btn-primary"
+                   style="display:inline-flex;align-items:center;justify-content:center;gap:8px;">
+                    🎧 Contact Support
+                </a>
+            </div>
+        </div>
+
+    @elseif (isset($wallet) && $wallet)
 
         {{-- Linked wallet display --}}
         <div class="card">

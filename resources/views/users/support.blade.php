@@ -63,14 +63,32 @@
 
 </div>
 
-<!-- JavaScript to Open LiveChat -->
+<!-- Open the Chatway live-chat widget when the button is clicked -->
 <script>
     function openLiveChat() {
-        if (window.LC_API) {
-            window.LC_API.open_chat_window();
-        } else {
-            alert('Chat service is currently unavailable. Please email support@realtymogul.app');
+        // Preferred: Chatway's own programmatic open API (name can vary by plan).
+        try {
+            if (window.$chatway && typeof window.$chatway.openWidget === 'function') {
+                window.$chatway.openWidget();
+                return;
+            }
+            if (window.chatway && typeof window.chatway.open === 'function') {
+                window.chatway.open();
+                return;
+            }
+        } catch (e) { /* fall through to launcher click */ }
+
+        // Fallback: click Chatway's floating launcher if it's on the page.
+        var launcher = document.querySelector(
+            '#chatway-launcher, .chatway-launcher, [id^="chatway"] button, iframe[title*="Chatway" i]'
+        );
+        if (launcher) {
+            launcher.click();
+            return;
         }
+
+        // Last resort: widget not loaded (e.g. no widget ID configured yet).
+        alert('Live chat is not available right now. Please email support@realtymogul.app');
     }
 </script>
 

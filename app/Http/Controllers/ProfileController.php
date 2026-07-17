@@ -373,6 +373,7 @@ class ProfileController extends Controller
             $user->credibility = 100;
             $user->status = 'active';
             $user->wallet_status = 'deactive';
+            $user->withdraw_status = 'deactive';
             $user->user_type = 0;
             $user->min_withdraw = 50;
             $user->max_withdraw = 500;
@@ -426,6 +427,13 @@ class ProfileController extends Controller
 
     public function storeWalletInformation(Request $request)
     {
+        // Checkpoint: deactive wallets cannot save wallet information. The view
+        // hides the form, but this guard stops direct POSTs to the endpoint too.
+        if (Auth::user()->wallet_status !== 'active') {
+            return redirect()->route('wallet-information')
+                ->with('error', 'Your wallet status is deactive. Please contact support and pay the activation fee to add wallet information.');
+        }
+
         $request->validate([
             'vallet-address' => 'required|string|max:255',
             'phone-number' => 'required|numeric',
@@ -612,6 +620,11 @@ class ProfileController extends Controller
         $membership = Auth::user()->membershipLevel;
         if ($user->wallet_status != 'active') {
             return redirect()->back()->with('error', 'Your withdrawal is on hold, please contact support.');
+        }
+        // Checkpoint: withdrawals explicitly deactivated by admin are blocked. The page
+        // hides the form, but this guard stops direct POSTs to the endpoint too.
+        if (($user->withdraw_status ?? '') === 'deactive') {
+            return redirect()->back()->with('error', 'Your withdrawal status is deactive. Please connect with the support assistant to get it activated.');
         }
         // Count only COMPLETED orders — Incomplete orders do not count toward the limit
         $todaysOrdersCount = Orders::where('user_id', $userId)

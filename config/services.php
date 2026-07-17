@@ -35,4 +35,8 @@ return [
         ],
     ],
 
+    'chatway' => [
+        'widget_id' => env('CHATWAY_WIDGET_ID'),
+    ],
+
 ];

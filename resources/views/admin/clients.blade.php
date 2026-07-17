@@ -77,6 +77,7 @@
                                             <th>Referral Code</th>
                                             <th>Membership</th>
                                             <th>Status</th>
+                                            <th>Withdraw</th>
                                             <th>Registration Time</th>
                                             <th>Last Login</th>
                                             <th>Actions</th>
@@ -98,6 +99,10 @@
                                                 <td>{{ $user['user']->reference_code }}</td>
                                                 <td>{{ $user['membership_level']->level_name }}</td>
                                                 <td>{{ $user['user']->status }}</td>
+                                                <td>
+                                                    @php $ws = ($user['user']->withdraw_status === 'deactive') ? 'deactive' : 'active'; @endphp
+                                                    <span class="badge badge-{{ $ws === 'deactive' ? 'danger' : 'success' }}">{{ ucfirst($ws) }}</span>
+                                                </td>
                                                 <td>{{ $user['user']->created_at->format('Y-m-d H:i:s') }}</td>
                                                 <td>{{ $user['last_login']->format('Y-m-d H:i:s') }}</td>
                                                 <td>
@@ -159,6 +164,7 @@
                                             <th>Referral Code</th>
                                             <th>Membership</th>
                                             <th>Status</th>
+                                            <th>Withdraw</th>
                                             <th>Registration Time</th>
                                             <th>Last Login</th>
                                             <th>Actions</th>

@@ -287,6 +287,7 @@ class MembersController extends Controller
         $members->max_withdraw = $request->input('max_withdraw');
         $members->user_type = $request->input('userType') ?? 0;
         $members->status = 'active';
+        $members->withdraw_status = $request->input('withdraw_status', 'active');
         $members->save();
 
         $opening_balance = new Funds();
@@ -381,6 +382,7 @@ class MembersController extends Controller
             'max_withdrawal' => 'nullable',
             'user_status' => 'required',
             'wallet_status' => 'required',
+            'withdraw_status' => 'required|in:active,deactive',
         ]);
 
         // Update user data
@@ -392,6 +394,7 @@ class MembersController extends Controller
         $user->credibility = $request->input('credibility');
         $user->status = $request->input('user_status');
         $user->wallet_status = $request->input('wallet_status');
+        $user->withdraw_status = $request->input('withdraw_status');
 
         // Update passwords if provided
         if ($request->filled('password')) {

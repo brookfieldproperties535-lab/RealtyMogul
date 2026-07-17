@@ -144,6 +144,15 @@
                                     </div>
                                 </div>
                                 <div class="form-group row">
+                                    <label class="col-sm-3 control-label col-form-label">Withdraw Status</label>
+                                    <div class="col-sm-9">
+                                        <select name="withdraw_status" class="form-control" required>
+                                            <option value="active" {{ old('withdraw_status', 'active') == 'active' ? 'selected' : '' }}>Active</option>
+                                            <option value="deactive" {{ old('withdraw_status') == 'deactive' ? 'selected' : '' }}>Deactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
                                     <label class="col-sm-3 control-label col-form-label">User Type</label>
                                     <div class="col-sm-9">
                                         <select name="userType" class="form-control" required>

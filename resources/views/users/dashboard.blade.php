@@ -28,6 +28,19 @@
         <span class="marquee-item">🏆 Olivia P. is this week's top referrer — <span>8 new members</span></span>
         <span class="marquee-item">💰 Nathan G. withdrew <span>$175.00</span> via ACH transfer</span>
         <span class="marquee-item">🎉 Chloe B. just joined using a referral link</span>
+        <span class="marquee-item">💰 Victoria S. withdrew <span>$7,000.00</span> via bank transfer</span>
+        <span class="marquee-item">💎 David M. completed a <span>$8,000</span> selected task today</span>
+        <span class="marquee-item">📥 Robert H. deposited <span>$6,000.00</span> via ACH transfer</span>
+        <span class="marquee-item">🏆 Samantha K. withdrew <span>$5,000.00</span> successfully</span>
+        <span class="marquee-item">💰 Michael B. withdrew <span>$9,500.00</span> via Zelle</span>
+        <span class="marquee-item">📥 Jennifer L. deposited <span>$7,500.00</span> to upgrade to Platinum</span>
+        <span class="marquee-item">💎 William T. earned <span>$820.00</span> on a selected task</span>
+        <span class="marquee-item">🏆 Top earner this week: Alexander P. — <span>$12,400.00</span></span>
+        <span class="marquee-item">💰 Sophia R. withdrew <span>$6,750.00</span> via ACH transfer</span>
+        <span class="marquee-item">📥 Daniel W. deposited <span>$5,500.00</span> via bank transfer</span>
+        <span class="marquee-item">💎 Isabella G. completed a <span>$7,200</span> selected task today</span>
+        <span class="marquee-item">🎉 Christopher A. just earned <span>$640.00</span> referral commission</span>
+        <span class="marquee-item">💰 Olivia D. withdrew <span>$8,300.00</span> successfully</span>
         {{-- Duplicate for seamless loop --}}
         <span class="marquee-item">🎉 Jake M. just earned <span>$18.75</span> commission</span>
         <span class="marquee-item">🚀 New selected task available: Premium Real Estate Review</span>
@@ -49,19 +62,74 @@
         <span class="marquee-item">🏆 Olivia P. is this week's top referrer — <span>8 new members</span></span>
         <span class="marquee-item">💰 Nathan G. withdrew <span>$175.00</span> via ACH transfer</span>
         <span class="marquee-item">🎉 Chloe B. just joined using a referral link</span>
+        <span class="marquee-item">💰 Victoria S. withdrew <span>$7,000.00</span> via bank transfer</span>
+        <span class="marquee-item">💎 David M. completed a <span>$8,000</span> selected task today</span>
+        <span class="marquee-item">📥 Robert H. deposited <span>$6,000.00</span> via ACH transfer</span>
+        <span class="marquee-item">🏆 Samantha K. withdrew <span>$5,000.00</span> successfully</span>
+        <span class="marquee-item">💰 Michael B. withdrew <span>$9,500.00</span> via Zelle</span>
+        <span class="marquee-item">📥 Jennifer L. deposited <span>$7,500.00</span> to upgrade to Platinum</span>
+        <span class="marquee-item">💎 William T. earned <span>$820.00</span> on a selected task</span>
+        <span class="marquee-item">🏆 Top earner this week: Alexander P. — <span>$12,400.00</span></span>
+        <span class="marquee-item">💰 Sophia R. withdrew <span>$6,750.00</span> via ACH transfer</span>
+        <span class="marquee-item">📥 Daniel W. deposited <span>$5,500.00</span> via bank transfer</span>
+        <span class="marquee-item">💎 Isabella G. completed a <span>$7,200</span> selected task today</span>
+        <span class="marquee-item">🎉 Christopher A. just earned <span>$640.00</span> referral commission</span>
+        <span class="marquee-item">💰 Olivia D. withdrew <span>$8,300.00</span> successfully</span>
     </div>
 </div>
 
 {{-- OPTIMIZE SECTION --}}
+@php
+    $gaugeDone  = (int) ($userData['total_today_orders'] ?? 0);
+    $gaugeLimit = (int) ($userData['order_limit'] ?? 0);
+    $gaugeLeft  = max(0, $gaugeLimit - $gaugeDone);
+    $gaugeDonePct = $gaugeLimit > 0 ? min(100, round(($gaugeDone / $gaugeLimit) * 100)) : 0;
+    $gaugeLeftPct = $gaugeLimit > 0 ? 100 - $gaugeDonePct : 0;
+    $gaugeAvailable  = $userData['total_funds'] ?? 0;
+    $gaugeCommission = $userData['total_commission'] ?? 0;
+@endphp
 <div class="optimize-section">
     <div class="optimize-left">
         <h3>🚀 Data Optimization</h3>
         <p>Sync your task data and refresh available commissions. Run daily for best results and to unlock the latest task assignments for your membership level.</p>
+        <a href="{{ route('generate.order') }}"
+           class="btn-optimize"
+           id="optimizeBtn"
+           onclick="return handleOptimize(this)">⚡ Start Optimization</a>
     </div>
-    <a href="{{ route('generate.order') }}"
-       class="btn-optimize"
-       id="optimizeBtn"
-       onclick="return handleOptimize(this)">⚡ Start Optimization</a>
+
+    <div class="optimize-meter">
+        {{-- Semicircle gauge --}}
+        <div class="gauge-wrap">
+            <div class="gauge-canvas">
+                <canvas id="taskGauge"
+                        data-done="{{ $gaugeDone }}"
+                        data-limit="{{ $gaugeLimit }}"
+                        data-avail="{{ $gaugeAvailable }}"
+                        data-comm="{{ $gaugeCommission }}"></canvas>
+                <div class="gauge-center">
+                    <span class="gauge-total">{{ $gaugeLimit ?: '—' }}</span>
+                    <span class="gauge-badge">⚡</span>
+                </div>
+            </div>
+            <div class="gauge-edges">
+                <span class="gauge-edge done">{{ $gaugeDonePct }}%</span>
+                <span class="gauge-edge left">{{ $gaugeLeftPct }}%</span>
+            </div>
+        </div>
+
+        {{-- Side readings --}}
+        <div class="meter-readings">
+            <div class="reading">
+                <div class="reading-value r-avail">${{ number_format($gaugeAvailable, 2) }}</div>
+                <div class="reading-label">Available Balance</div>
+            </div>
+            <div class="reading">
+                <div class="reading-value r-comm">${{ number_format($gaugeCommission, 2) }}</div>
+                <div class="reading-label">Commission Earned</div>
+            </div>
+        </div>
+    </div>
 </div>
 
 {{-- EARNINGS STATS --}}
@@ -236,9 +304,12 @@ function handleOptimize(el) {
     el.classList.add('running');
     el.textContent = '⚙️ Optimizing...';
     el.style.pointerEvents = 'none';
-    setTimeout(function() {
-        window.location.href = el.href;
-    }, 1400);
+    var go = function() { window.location.href = el.href; };
+    if (typeof window.animateTaskGauge === 'function') {
+        window.animateTaskGauge(go);
+    } else {
+        setTimeout(go, 1400);
+    }
     return false;
 }
 
@@ -398,6 +469,118 @@ function handleOptimize(el) {
                 fetchEarnings();
             });
         }
+    });
+})();
+
+// ── DAILY TASK PROGRESS GAUGE (semicircle) ──
+(function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        var canvas = document.getElementById('taskGauge');
+        if (!canvas || typeof Chart === 'undefined') return;
+
+        var done  = parseInt(canvas.dataset.done, 10)  || 0;
+        var limit = parseInt(canvas.dataset.limit, 10) || 0;
+        var remaining = Math.max(0, limit - done);
+        if (done > limit && limit > 0) done = limit; // clamp to limit
+
+        var ctx = canvas.getContext('2d');
+
+        // Two solid segments: completed (purple) and remaining (cyan) — hex values
+        // mirror the --primary-light / --accent CSS custom properties, which Chart.js
+        // canvas rendering can't read as var() strings.
+        // When no limit is set, show a full neutral track so the gauge still reads cleanly.
+        var data = limit > 0 ? [done, remaining] : [0, 1];
+        var colors = limit > 0 ? ['#8b6bff', '#00e5ff'] : ['rgba(108,71,255,0.14)', 'rgba(108,71,255,0.14)'];
+
+        var chart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                datasets: [{
+                    data: data,
+                    backgroundColor: colors,
+                    borderWidth: 0
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                rotation: Math.PI,          // start at 9 o'clock
+                circumference: Math.PI,     // sweep over the top → 3 o'clock (dome)
+                cutoutPercentage: 72,
+                legend: { display: false },
+                tooltips: { enabled: false },
+                hover: { mode: null },
+                animation: { animateRotate: true, duration: 900 }
+            }
+        });
+
+        // ── Speedometer "rev" animation, triggered by the Start Optimization button ──
+        var origAvail = parseFloat(canvas.dataset.avail) || 0;
+        var origComm  = parseFloat(canvas.dataset.comm)  || 0;
+
+        var totalEl = document.querySelector('.gauge-total');
+        var doneEdge = document.querySelector('.gauge-edge.done');
+        var leftEdge = document.querySelector('.gauge-edge.left');
+        var availEl = document.querySelector('.reading-value.r-avail');
+        var commEl  = document.querySelector('.reading-value.r-comm');
+
+        function money(n) {
+            return '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        window.animateTaskGauge = function(onDone) {
+            var duration = 3000;   // total run before handing off
+            var cycles   = 2;      // number of full 0→100→0 swings
+
+            // Real resting values to restore at the end.
+            var realDonePct = limit > 0 ? Math.min(100, Math.round((done / limit) * 100)) : 0;
+            var realLeftPct = limit > 0 ? 100 - realDonePct : 0;
+
+            // Colored sweep even if the user had no limit set.
+            chart.data.datasets[0].backgroundColor = ['#8b6bff', '#00e5ff'];
+
+            var start = null;
+            function frame(now) {
+                if (start === null) start = now;
+                var t = (now - start) / duration;
+
+                if (t >= 1) {
+                    // Settle smoothly back to the real resting state, then hand off.
+                    chart.data.datasets[0].data = data;
+                    chart.data.datasets[0].backgroundColor = colors;
+                    chart.update({ duration: 320 });
+                    if (doneEdge) doneEdge.textContent = realDonePct + '%';
+                    if (leftEdge) leftEdge.textContent = realLeftPct + '%';
+                    if (totalEl)  totalEl.textContent  = (limit || '—');
+                    if (availEl)  availEl.textContent  = money(origAvail);
+                    if (commEl)   commEl.textContent   = money(origComm);
+                    if (typeof onDone === 'function') onDone();
+                    return;
+                }
+
+                // Sinusoidal pendulum: 0→100→0, with velocity easing smoothly through
+                // the turning points (no dead stop). One clock drives both arc and text.
+                var swing = 0.5 - 0.5 * Math.cos(t * Math.PI * 2 * cycles);
+                var pct = swing * 100;
+
+                chart.data.datasets[0].data = [pct, 100 - pct];
+                chart.update({ duration: 0 });
+
+                if (doneEdge) doneEdge.textContent = Math.round(pct) + '%';
+                if (leftEdge) leftEdge.textContent = Math.round(100 - pct) + '%';
+                if (totalEl)  totalEl.textContent  = Math.round(swing * (limit || 100));
+
+                // Money counts up smoothly toward the real figure (a clean "calculating"
+                // rise, no random flicker), settling a touch before the end.
+                var cp = Math.min(1, t * 1.25);
+                var eased = 1 - Math.pow(1 - cp, 3);   // easeOutCubic
+                if (availEl) availEl.textContent = money(origAvail * eased);
+                if (commEl)  commEl.textContent  = money(origComm  * eased);
+
+                requestAnimationFrame(frame);
+            }
+            requestAnimationFrame(frame);
+        };
     });
 })();
 </script>

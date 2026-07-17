@@ -64,7 +64,35 @@
     $maxWithdraw      = $user->max_withdraw ?? 2000;
     $maxAllowed       = min($maxWithdraw, $availableBalance);
     $walletStatus     = $user->wallet_status ?? 'inactive';
+    $withdrawBlocked  = ($user->withdraw_status ?? '') === 'deactive';
 @endphp
+
+@if ($withdrawBlocked)
+
+    {{-- Withdrawal deactivated by admin — block the form, point to support --}}
+    <div style="max-width:560px;margin:40px auto;">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title"><span class="icon">📤</span> Withdrawal</div>
+                <span class="status-badge status-pending">Deactive</span>
+            </div>
+            <div class="card-body" style="text-align:center;padding:36px 28px;">
+                <div style="font-size:40px;margin-bottom:14px;">🔒</div>
+                <h3 style="font-size:17px;font-weight:700;color:var(--text);margin:0 0 10px;">Your Withdrawal Is Deactivated</h3>
+                <p style="font-size:13.5px;color:var(--text-muted);line-height:1.7;margin:0 0 22px;">
+                    Your withdrawal status is currently <strong style="color:var(--danger);">deactive</strong>.
+                    Please connect with the support assistant to get your withdrawals activated
+                    by the admin before you can request a redemption.
+                </p>
+                <a href="{{ route('user.support') }}" class="btn btn-primary"
+                   style="display:inline-flex;align-items:center;justify-content:center;gap:8px;">
+                    🎧 Connect to Support Assistant
+                </a>
+            </div>
+        </div>
+    </div>
+
+@else
 
 {{-- BALANCE SUMMARY BAR --}}
 <div class="redemption-stats">
@@ -378,5 +406,7 @@
         });
     })();
 </script>
+
+@endif
 
 @endsection
