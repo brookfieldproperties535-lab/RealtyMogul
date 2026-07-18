@@ -318,11 +318,7 @@
     </script>
     @stack('scripts')
 
-    {{-- Chatway live-chat widget — loads on every user-panel page when configured --}}
-    @if (config('services.chatway.widget_id'))
-        <script id="chatway" async
-                src="https://cdn.chatway.app/widget.js?id={{ config('services.chatway.widget_id') }}"></script>
-    @endif
+    @include('partials.chatway')
 </body>
 
 </html>

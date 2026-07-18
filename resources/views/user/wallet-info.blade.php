@@ -105,7 +105,7 @@
                     <div class="form-group">
                         <label class="form-label" for="phone-number">Phone Number</label>
                         <input id="phone-number" name="phone-number" type="tel"
-                               class="form-input" placeholder="03xx xxx xxxx"
+                               class="form-input" placeholder="+1 (XXX) XXX-XXXX"
                                value="{{ old('phone-number') }}" required>
                         @error('phone-number')
                             <div style="color:var(--danger);font-size:12px;margin-top:4px;">{{ $message }}</div>

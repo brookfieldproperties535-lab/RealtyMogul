@@ -108,6 +108,7 @@
             </div>
         </div>
     </div>
+    @include('partials.chatway')
 </body>
 
 </html>

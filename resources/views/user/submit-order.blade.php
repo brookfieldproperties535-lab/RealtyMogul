@@ -248,6 +248,56 @@
         </div>
     @endif
 
+    {{-- ── PROGRESS GAUGE (copied from the dashboard) ────────── --}}
+    @php
+        $gaugeDone       = (int) ($gauge['done'] ?? 0);
+        $gaugeLimit      = (int) ($gauge['limit'] ?? 0);
+        $gaugeLeft       = max(0, $gaugeLimit - $gaugeDone);
+        $gaugeDonePct    = $gaugeLimit > 0 ? min(100, round(($gaugeDone / $gaugeLimit) * 100)) : 0;
+        $gaugeLeftPct    = $gaugeLimit > 0 ? 100 - $gaugeDonePct : 0;
+        $gaugeAvailable  = $gauge['available'] ?? 0;
+        $gaugeCommission = $gauge['commission'] ?? 0;
+    @endphp
+    <div class="card">
+        <div class="card-header">
+            <div class="card-title"><span class="icon">📊</span> Your Progress</div>
+        </div>
+        <div class="card-body">
+            <div class="optimize-meter" style="justify-content:space-around;">
+                {{-- Semicircle gauge --}}
+                <div class="gauge-wrap">
+                    <div class="gauge-canvas">
+                        <canvas id="taskGauge"
+                                data-done="{{ $gaugeDone }}"
+                                data-limit="{{ $gaugeLimit }}"
+                                data-avail="{{ $gaugeAvailable }}"
+                                data-comm="{{ $gaugeCommission }}"></canvas>
+                        <div class="gauge-center">
+                            <span class="gauge-total">{{ $gaugeLimit ?: '—' }}</span>
+                            <span class="gauge-badge">⚡</span>
+                        </div>
+                    </div>
+                    <div class="gauge-edges">
+                        <span class="gauge-edge done">{{ $gaugeDonePct }}%</span>
+                        <span class="gauge-edge left">{{ $gaugeLeftPct }}%</span>
+                    </div>
+                </div>
+
+                {{-- Side readings --}}
+                <div class="meter-readings">
+                    <div class="reading">
+                        <div class="reading-value r-avail">${{ number_format($gaugeAvailable, 2) }}</div>
+                        <div class="reading-label">Available Balance</div>
+                    </div>
+                    <div class="reading">
+                        <div class="reading-value r-comm">${{ number_format($gaugeCommission, 2) }}</div>
+                        <div class="reading-label">Commission Earned</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     @if (!$orderData || count($orderData) === 0)
         <div style="background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:60px 24px;text-align:center;">
             <div style="font-size:44px;margin-bottom:14px;opacity:0.4;">📭</div>
@@ -406,5 +456,42 @@
     @endif
 
 </div>{{-- /so-wrapper --}}
+
+@push('scripts')
+<script src="{{ asset('admin/assets/libs/chart.js/dist/Chart.min.js') }}"></script>
+<script>
+// Static progress gauge (same render as the dashboard gauge).
+(function() {
+    document.addEventListener('DOMContentLoaded', function() {
+        var canvas = document.getElementById('taskGauge');
+        if (!canvas || typeof Chart === 'undefined') return;
+
+        var done  = parseInt(canvas.dataset.done, 10)  || 0;
+        var limit = parseInt(canvas.dataset.limit, 10) || 0;
+        var remaining = Math.max(0, limit - done);
+        if (done > limit && limit > 0) done = limit;
+
+        var data   = limit > 0 ? [done, remaining] : [0, 1];
+        var colors = limit > 0 ? ['#8b6bff', '#00e5ff'] : ['rgba(108,71,255,0.14)', 'rgba(108,71,255,0.14)'];
+
+        new Chart(canvas.getContext('2d'), {
+            type: 'doughnut',
+            data: { datasets: [{ data: data, backgroundColor: colors, borderWidth: 0 }] },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                rotation: Math.PI,
+                circumference: Math.PI,
+                cutoutPercentage: 72,
+                legend: { display: false },
+                tooltips: { enabled: false },
+                hover: { mode: null },
+                animation: { animateRotate: true, duration: 900 }
+            }
+        });
+    });
+})();
+</script>
+@endpush
 
 @endsection

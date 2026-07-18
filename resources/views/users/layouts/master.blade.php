@@ -344,6 +344,8 @@
 
     <!-- Index -->
     <script src="{{ asset('user/assets/js/index.js') }}"></script>
+
+    @include('partials.chatway')
 </body>
 
 

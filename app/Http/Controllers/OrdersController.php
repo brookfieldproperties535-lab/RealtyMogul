@@ -71,6 +71,17 @@ class OrdersController extends Controller
             ]);
         }
 
+        // Progress-gauge data for the submit-order view (mirrors the dashboard gauge).
+        $gauge = [
+            'done'       => $todaysCompletedOrdersCount,
+            'limit'      => (int) ($membership->order_limit ?? 0),
+            'available'  => $funds,
+            'commission' => Funds::where('user_id', $user->id)
+                                ->where('type', 'commission')
+                                ->whereIn('status', ['active', 'deactive'])
+                                ->sum('amount'),
+        ];
+
         // Fetch all selected orders for the user
         $selectedOrders = SelectedOrder::where('user_id', $user->id)->get();
 
@@ -112,7 +123,7 @@ class OrdersController extends Controller
         }
 
         if (count($orderData) > 0) {
-            return view('user.submit-order', ['orderData' => $orderData]);
+            return view('user.submit-order', ['orderData' => $orderData, 'gauge' => $gauge]);
         } else {
             // If the conditions do not match, get a random order and save it
             $minPrice = 0.3 * $funds;
@@ -156,7 +167,7 @@ class OrdersController extends Controller
                 ],
             ];
 
-            return view('user.submit-order', ['orderData' => $orderData]);
+            return view('user.submit-order', ['orderData' => $orderData, 'gauge' => $gauge]);
         }
     }
 
