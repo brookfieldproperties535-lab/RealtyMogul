@@ -5,78 +5,10 @@
 
 @section('content')
 
-{{-- MARQUEE TICKER --}}
-<div class="marquee-wrapper">
-    <div class="marquee-track">
-        <span class="marquee-item">🎉 Jake M. just earned <span>$18.75</span> commission</span>
-        <span class="marquee-item">🚀 New selected task available: Premium Real Estate Review</span>
-        <span class="marquee-item">💰 Sarah L. withdrew <span>$120.00</span> successfully</span>
-        <span class="marquee-item">⭐ Gold members: 5 new selected tasks added today</span>
-        <span class="marquee-item">🏆 Top earner today: Tyler B. — <span>$312.00</span></span>
-        <span class="marquee-item">🎉 Emma R. just earned <span>$74.50</span> referral commission</span>
-        <span class="marquee-item">💎 Diamond member Chris D. completed 30 tasks today</span>
-        <span class="marquee-item">🚀 New selected task: Luxury Real Estate Campaign — <span>$500</span> commission</span>
-        <span class="marquee-item">💰 Marcus T. withdrew <span>$200.00</span> via bank transfer</span>
-        <span class="marquee-item">⭐ Platinum upgrade special: Get 5 selected tasks/day</span>
-        <span class="marquee-item">🎉 Ashley W. just earned <span>$22.00</span> in daily commissions</span>
-        <span class="marquee-item">🏆 Brandon K. hit a milestone — <span>50 tasks</span> completed</span>
-        <span class="marquee-item">💰 Megan S. withdrew <span>$95.00</span> successfully</span>
-        <span class="marquee-item">🚀 New selected task: Premium Listing Review — <span>$250</span> commission</span>
-        <span class="marquee-item">⭐ Silver members: 2 bonus tasks unlocked this weekend</span>
-        <span class="marquee-item">🎉 Jordan H. earned <span>$48.00</span> from referral bonus</span>
-        <span class="marquee-item">💎 Dylan R. completed a <span>$500</span> selected task today</span>
-        <span class="marquee-item">🏆 Olivia P. is this week's top referrer — <span>8 new members</span></span>
-        <span class="marquee-item">💰 Nathan G. withdrew <span>$175.00</span> via ACH transfer</span>
-        <span class="marquee-item">🎉 Chloe B. just joined using a referral link</span>
-        <span class="marquee-item">💰 Victoria S. withdrew <span>$7,000.00</span> via bank transfer</span>
-        <span class="marquee-item">💎 David M. completed a <span>$8,000</span> selected task today</span>
-        <span class="marquee-item">📥 Robert H. deposited <span>$6,000.00</span> via ACH transfer</span>
-        <span class="marquee-item">🏆 Samantha K. withdrew <span>$5,000.00</span> successfully</span>
-        <span class="marquee-item">💰 Michael B. withdrew <span>$9,500.00</span> via Zelle</span>
-        <span class="marquee-item">📥 Jennifer L. deposited <span>$7,500.00</span> to upgrade to Platinum</span>
-        <span class="marquee-item">💎 William T. earned <span>$820.00</span> on a selected task</span>
-        <span class="marquee-item">🏆 Top earner this week: Alexander P. — <span>$12,400.00</span></span>
-        <span class="marquee-item">💰 Sophia R. withdrew <span>$6,750.00</span> via ACH transfer</span>
-        <span class="marquee-item">📥 Daniel W. deposited <span>$5,500.00</span> via bank transfer</span>
-        <span class="marquee-item">💎 Isabella G. completed a <span>$7,200</span> selected task today</span>
-        <span class="marquee-item">🎉 Christopher A. just earned <span>$640.00</span> referral commission</span>
-        <span class="marquee-item">💰 Olivia D. withdrew <span>$8,300.00</span> successfully</span>
-        {{-- Duplicate for seamless loop --}}
-        <span class="marquee-item">🎉 Jake M. just earned <span>$18.75</span> commission</span>
-        <span class="marquee-item">🚀 New selected task available: Premium Real Estate Review</span>
-        <span class="marquee-item">💰 Sarah L. withdrew <span>$120.00</span> successfully</span>
-        <span class="marquee-item">⭐ Gold members: 5 new selected tasks added today</span>
-        <span class="marquee-item">🏆 Top earner today: Tyler B. — <span>$312.00</span></span>
-        <span class="marquee-item">🎉 Emma R. just earned <span>$74.50</span> referral commission</span>
-        <span class="marquee-item">💎 Diamond member Chris D. completed 30 tasks today</span>
-        <span class="marquee-item">🚀 New selected task: Luxury Real Estate Campaign — <span>$500</span> commission</span>
-        <span class="marquee-item">💰 Marcus T. withdrew <span>$200.00</span> via bank transfer</span>
-        <span class="marquee-item">⭐ Platinum upgrade special: Get 5 selected tasks/day</span>
-        <span class="marquee-item">🎉 Ashley W. just earned <span>$22.00</span> in daily commissions</span>
-        <span class="marquee-item">🏆 Brandon K. hit a milestone — <span>50 tasks</span> completed</span>
-        <span class="marquee-item">💰 Megan S. withdrew <span>$95.00</span> successfully</span>
-        <span class="marquee-item">🚀 New selected task: Premium Listing Review — <span>$250</span> commission</span>
-        <span class="marquee-item">⭐ Silver members: 2 bonus tasks unlocked this weekend</span>
-        <span class="marquee-item">🎉 Jordan H. earned <span>$48.00</span> from referral bonus</span>
-        <span class="marquee-item">💎 Dylan R. completed a <span>$500</span> selected task today</span>
-        <span class="marquee-item">🏆 Olivia P. is this week's top referrer — <span>8 new members</span></span>
-        <span class="marquee-item">💰 Nathan G. withdrew <span>$175.00</span> via ACH transfer</span>
-        <span class="marquee-item">🎉 Chloe B. just joined using a referral link</span>
-        <span class="marquee-item">💰 Victoria S. withdrew <span>$7,000.00</span> via bank transfer</span>
-        <span class="marquee-item">💎 David M. completed a <span>$8,000</span> selected task today</span>
-        <span class="marquee-item">📥 Robert H. deposited <span>$6,000.00</span> via ACH transfer</span>
-        <span class="marquee-item">🏆 Samantha K. withdrew <span>$5,000.00</span> successfully</span>
-        <span class="marquee-item">💰 Michael B. withdrew <span>$9,500.00</span> via Zelle</span>
-        <span class="marquee-item">📥 Jennifer L. deposited <span>$7,500.00</span> to upgrade to Platinum</span>
-        <span class="marquee-item">💎 William T. earned <span>$820.00</span> on a selected task</span>
-        <span class="marquee-item">🏆 Top earner this week: Alexander P. — <span>$12,400.00</span></span>
-        <span class="marquee-item">💰 Sophia R. withdrew <span>$6,750.00</span> via ACH transfer</span>
-        <span class="marquee-item">📥 Daniel W. deposited <span>$5,500.00</span> via bank transfer</span>
-        <span class="marquee-item">💎 Isabella G. completed a <span>$7,200</span> selected task today</span>
-        <span class="marquee-item">🎉 Christopher A. just earned <span>$640.00</span> referral commission</span>
-        <span class="marquee-item">💰 Olivia D. withdrew <span>$8,300.00</span> successfully</span>
-    </div>
-</div>
+
+@push('styles')
+    <link rel="stylesheet" href="{{ asset('user/appcss/notifications.css') }}">
+@endpush
 
 {{-- OPTIMIZE SECTION --}}
 @php
@@ -297,6 +229,7 @@
 
 @push('scripts')
 <script src="{{ asset('admin/assets/libs/chart.js/dist/Chart.min.js') }}"></script>
+<script src="{{ asset('user/appjs/notifications.js') }}"></script>
 <script>
 function handleOptimize(el) {
     if (el.dataset.running === '1') return false;
@@ -319,7 +252,7 @@ function handleOptimize(el) {
     var currentRange = '7d';
     var lastLabels = [];
     var lastData = [];
-    var PALETTE = ['#6c47ff', '#00e5ff', '#00d68f', '#ffb800', '#ff6b35', '#8b6bff'];
+    var PALETTE = ['#14a800', '#2f9e44', '#0e9f4f', '#dd8a00', '#ff6b35', '#2fbf3a'];
 
     var RANGE_LABELS = {
         today: 'Today',
@@ -347,7 +280,7 @@ function handleOptimize(el) {
                     label: 'Earnings',
                     data: data,
                     borderColor: PALETTE[0],
-                    backgroundColor: type === 'pie' ? PALETTE : (type === 'line' ? 'rgba(108,71,255,0.15)' : PALETTE[0]),
+                    backgroundColor: type === 'pie' ? PALETTE : (type === 'line' ? 'rgba(20,168,0,0.15)' : PALETTE[0]),
                     fill: type === 'line'
                 }]
             },
@@ -490,7 +423,7 @@ function handleOptimize(el) {
         // canvas rendering can't read as var() strings.
         // When no limit is set, show a full neutral track so the gauge still reads cleanly.
         var data = limit > 0 ? [done, remaining] : [0, 1];
-        var colors = limit > 0 ? ['#8b6bff', '#00e5ff'] : ['rgba(108,71,255,0.14)', 'rgba(108,71,255,0.14)'];
+        var colors = limit > 0 ? ['#2fbf3a', '#2f9e44'] : ['rgba(20,168,0,0.14)', 'rgba(20,168,0,0.14)'];
 
         var chart = new Chart(ctx, {
             type: 'doughnut',
@@ -537,7 +470,7 @@ function handleOptimize(el) {
             var realLeftPct = limit > 0 ? 100 - realDonePct : 0;
 
             // Colored sweep even if the user had no limit set.
-            chart.data.datasets[0].backgroundColor = ['#8b6bff', '#00e5ff'];
+            chart.data.datasets[0].backgroundColor = ['#2fbf3a', '#2f9e44'];
 
             var start = null;
             function frame(now) {

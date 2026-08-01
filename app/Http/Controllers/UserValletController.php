@@ -47,7 +47,8 @@ class UserValletController extends Controller
         $request->validate([
             'user_id' => 'required|integer|exists:users,id',
             'vallet_address' => 'required|string',
-            'type' => 'required|string',
+            'type' => 'required|string',       // Currency
+            'network' => 'required|string',    // Network
             'phone' => 'required|string',
         ]);
 
@@ -55,6 +56,7 @@ class UserValletController extends Controller
         $vallet->user_id = $request->input('user_id');
         $vallet->vallet_address = $request->input('vallet_address');
         $vallet->type = $request->input('type');
+        $vallet->network = $request->input('network');
         $vallet->phone = $request->input('phone');
         $vallet->save();
 
@@ -101,7 +103,8 @@ class UserValletController extends Controller
         $request->validate([
             'user_id' => 'required|integer|exists:users,id',
             'vallet_address' => 'required|string',
-            'type' => 'required|string',
+            'type' => 'required|string',       // Currency
+            'network' => 'required|string',    // Network
             'phone' => 'required|string',
         ]);
 
@@ -111,6 +114,7 @@ class UserValletController extends Controller
         // Update the wallet information
         $wallet->vallet_address = $request->input('vallet_address');
         $wallet->type = $request->input('type');
+        $wallet->network = $request->input('network');
         $wallet->phone = $request->input('phone');
         $wallet->save();
 

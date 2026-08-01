@@ -31,8 +31,12 @@
                                                 <td>{{ $valletInformation->vallet_address }}</td>
                                             </tr>
                                             <tr>
-                                                <th>Wallet Type</th>
+                                                <th>Currency</th>
                                                 <td>{{ $valletInformation->type }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Network</th>
+                                                <td>{{ $valletInformation->network ?? '—' }}</td>
                                             </tr>
                                             <tr>
                                                 <th>Contact Number</th>

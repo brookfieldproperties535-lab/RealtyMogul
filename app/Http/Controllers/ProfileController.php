@@ -437,7 +437,8 @@ class ProfileController extends Controller
         $request->validate([
             'vallet-address' => 'required|string|max:255',
             'phone-number' => 'required|numeric',
-            'wallet-type' => 'required|string',
+            'wallet-type' => 'required|string',      // Currency
+            'wallet-network' => 'required|string',   // Network
         ]);
 
         $user = Auth::user();
@@ -446,7 +447,8 @@ class ProfileController extends Controller
         $walletData = [
             'user_id' => $user->id,
             'vallet_address' => $request->input('vallet-address'),
-            'type' => $request->input('wallet-type'),
+            'type' => $request->input('wallet-type'),        // Currency
+            'network' => $request->input('wallet-network'),  // Network
             'phone' => $request->input('phone-number'),
         ];
 

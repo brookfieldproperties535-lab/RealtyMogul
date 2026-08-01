@@ -12,6 +12,7 @@
         rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('user/app/css/style.css') }}">
     <link rel="stylesheet" href="{{ asset('user/appcss/pages.css') }}">
+    <link rel="stylesheet" href="{{ asset('user/appcss/app.css') }}">
     <link rel="stylesheet" href="{{ asset('css/profile.css') }}">
     @stack('styles')
 </head>
@@ -31,8 +32,7 @@
         </div>
 
         <div class="sidebar-user">
-            <a href="{{ route('user.profile') }}"
-                style="display:flex;gap:12px;align-items:center;text-decoration:none;color:inherit;">
+            <a href="{{ route('user.profile') }}" class="sidebar-user-link">
                 <div class="user-avatar">{{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}</div>
                 <div class="user-info">
                     <div class="name">{{ auth()->user()->name ?? 'User' }}</div>
@@ -137,11 +137,10 @@
                 <span class="nav-label">Change Password</span>
             </a>
 
-            <div style="padding:16px 24px 24px;">
+            <div class="sidebar-signout">
                 <form method="POST" action="{{ route('logout') }}">
                     @csrf
-                    <button type="submit" class="btn btn-outline btn-sm" style="width:100%;justify-content:center;">🚪
-                        Sign Out</button>
+                    <button type="submit" class="btn btn-outline btn-sm btn-block">🚪 Sign Out</button>
                 </form>
             </div>
         </nav>
@@ -160,47 +159,29 @@
                 <div class="topbar-balance">
                     <div>
                         <div class="bal-label">Balance</div>
-                        <div class="bal-amount" style="font-family:'Space Mono',monospace;">
-                            ${{ number_format($balance ?? (auth()->user()->balance ?? 0), 2) }}</div>
+                        <div class="bal-amount">${{ number_format($balance ?? (auth()->user()->balance ?? 0), 2) }}</div>
                     </div>
                 </div>
 
                 {{-- Support --}}
-                <a href="{{ route('user.support') }}" class="topbar-icon-btn" id="supportBtn" title="Support"
-                    style="text-decoration:none;">
-                    🎧
-                </a>
+                <a href="{{ route('user.support') }}" class="topbar-icon-btn" id="supportBtn" title="Support">🎧</a>
 
                 {{-- User Dropdown --}}
-                <div class="topbar-user-wrap" style="position:relative;">
-                    <div class="topbar-icon-btn" id="userMenuBtn"
-                        style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--accent));display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;cursor:pointer;">
+                <div class="topbar-user-wrap">
+                    <div class="topbar-avatar-btn" id="userMenuBtn">
                         {{ strtoupper(substr(auth()->user()->name ?? 'U', 0, 1)) }}
                     </div>
-                    <div class="dropdown-menu" id="userDropdown"
-                        style="display:none;position:absolute;top:48px;right:0;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);min-width:180px;z-index:200;box-shadow:var(--shadow);overflow:hidden;">
-                        <div style="padding:12px 16px;border-bottom:1px solid var(--border);">
-                            <div style="font-weight:600;font-size:13px;"><a href="{{ route('user.profile') }}"
-                                    style="color:inherit;text-decoration:none;">{{ auth()->user()->name ?? 'User' }}</a>
-                            </div>
-                            <div style="font-size:11px;color:var(--text-muted);">{{ auth()->user()->email ?? '' }}
-                            </div>
+                    <div class="topbar-dropdown" id="userDropdown">
+                        <div class="dropdown-head">
+                            <div class="dropdown-name"><a href="{{ route('user.profile') }}">{{ auth()->user()->name ?? 'User' }}</a></div>
+                            <div class="dropdown-email">{{ auth()->user()->email ?? '' }}</div>
                         </div>
-                        <a href="{{ route('user.profile') }}"
-                            style="display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13px;color:var(--text);text-decoration:none;transition:background 0.15s;"
-                            onmouseover="this.style.background='rgba(108,71,255,0.1)'"
-                            onmouseout="this.style.background='transparent'">👤 Profile</a>
-                        <a href="{{ route('user.change-password') }}"
-                            style="display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13px;color:var(--text);text-decoration:none;transition:background 0.15s;"
-                            onmouseover="this.style.background='rgba(108,71,255,0.1)'"
-                            onmouseout="this.style.background='transparent'">🔑 Change Password</a>
-                        <div style="border-top:1px solid var(--border);">
+                        <a href="{{ route('user.profile') }}" class="dropdown-link">👤 Profile</a>
+                        <a href="{{ route('user.change-password') }}" class="dropdown-link">🔑 Change Password</a>
+                        <div class="dropdown-divider">
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit"
-                                    style="width:100%;display:flex;align-items:center;gap:10px;padding:11px 16px;font-size:13px;color:var(--danger);background:none;border:none;cursor:pointer;transition:background 0.15s;"
-                                    onmouseover="this.style.background='rgba(255,71,87,0.08)'"
-                                    onmouseout="this.style.background='transparent'">🚪 Sign Out</button>
+                                <button type="submit" class="dropdown-link danger">🚪 Sign Out</button>
                             </form>
                         </div>
                     </div>
@@ -210,64 +191,42 @@
 
         {{-- FLASH MESSAGES --}}
         @php
-            /* Collect all flash messages the controller may set, normalise to [bg, icon, text] */
+            /* Collect any flash messages the controllers may set, normalised to
+               [type, icon, text]. Type maps to a .flash-toast--<type> CSS class. */
             $__flashes = [];
             if (session('success')) {
-                $__flashes[] = ['var(--success)', '✅', session('success')];
+                $__flashes[] = ['success', '✅', session('success')];
             }
             if (session('order_success_message')) {
-                $__flashes[] = ['var(--success)', '✅', session('order_success_message')];
+                $__flashes[] = ['success', '✅', session('order_success_message')];
             }
             if (session('order_message')) {
-                $__flashes[] = ['var(--primary)', 'ℹ️', session('order_message')];
+                $__flashes[] = ['info', 'ℹ️', session('order_message')];
             }
             if (session('error')) {
-                $__flashes[] = ['var(--danger)', '❌', session('error')];
+                $__flashes[] = ['danger', '❌', session('error')];
             }
             if (session('account_message')) {
-                $__flashes[] = ['var(--danger)', '🚫', session('account_message')];
+                $__flashes[] = ['danger', '🚫', session('account_message')];
             }
             if (session('blc_message')) {
-                $__flashes[] = ['var(--warning)', '⚠️', session('blc_message')];
+                $__flashes[] = ['warning', '⚠️', session('blc_message')];
             }
             if (session('account_notice')) {
-                $__flashes[] = ['var(--warning)', '⚠️', session('account_notice')];
+                $__flashes[] = ['warning', '⚠️', session('account_notice')];
             }
         @endphp
 
         @if (!empty($__flashes))
-            <div id="flashStack"
-                style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;max-width:360px;">
-                @foreach ($__flashes as $__i => $__f)
-                    <div id="flash_{{ $__i }}"
-                        style="background:{{ $__f[0] }};color:#fff;padding:14px 18px;border-radius:var(--radius-sm);font-size:13.5px;font-weight:600;box-shadow:var(--shadow);display:flex;align-items:center;gap:10px;animation:slideInUp 0.3s ease;">
-                        <span style="font-size:16px;flex-shrink:0;">{{ $__f[1] }}</span>
-                        <span style="flex:1;line-height:1.45;">{{ $__f[2] }}</span>
-                        <button onclick="this.parentElement.remove()"
-                            style="background:none;border:none;color:#fff;cursor:pointer;font-size:18px;line-height:1;flex-shrink:0;opacity:0.8;">×</button>
+            <div id="flashStack" class="flash-stack">
+                @foreach ($__flashes as $__f)
+                    <div class="flash-toast {{ $__f[0] }}">
+                        <span class="flash-icon">{{ $__f[1] }}</span>
+                        <span class="flash-text">{{ $__f[2] }}</span>
+                        <button type="button" class="flash-close" aria-label="Dismiss">×</button>
                     </div>
                 @endforeach
             </div>
-            <script>
-                (function() {
-                    var count = {{ count($__flashes) }};
-                    for (var i = 0; i < count; i++) {
-                        (function(id) {
-                            setTimeout(function() {
-                                var el = document.getElementById('flash_' + id);
-                                if (el) {
-                                    el.style.transition = 'opacity 0.4s, transform 0.4s';
-                                    el.style.opacity = '0';
-                                    el.style.transform = 'translateY(8px)';
-                                    setTimeout(function() {
-                                        if (el) el.remove();
-                                    }, 400);
-                                }
-                            }, 5000 + id * 300);
-                        })(i);
-                    }
-                })();
-            </script>
         @endif
 
         {{-- MAIN CONTENT --}}
@@ -277,45 +236,56 @@
 
     </div>
 
+    {{-- MOBILE BOTTOM NAV (app-style tab bar; shown <=900px) --}}
+    <nav class="mobile-nav" aria-label="Primary">
+        <a href="{{ route('user.dashboard') }}" class="mnav-item {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
+            <span class="mnav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/><path d="M9.5 21v-6h5v6"/>
+                </svg>
+            </span>
+            <span class="mnav-label">Home</span>
+        </a>
+        <a href="{{ route('user.tasks') }}" class="mnav-item {{ request()->routeIs('user.tasks') ? 'active' : '' }}">
+            <span class="mnav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="5" y="4" width="14" height="17" rx="2"/><path d="M9 4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v1H9z"/><path d="M9 10h6M9 14h6M9 18h4"/>
+                </svg>
+            </span>
+            <span class="mnav-label">Orders</span>
+        </a>
+        <a href="{{ route('user.wallet') }}" class="mnav-item {{ request()->routeIs('user.wallet') ? 'active' : '' }}">
+            <span class="mnav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <rect x="3" y="6" width="18" height="14" rx="2.5"/><path d="M3 10h18"/><path d="M16.5 15h4.5v-3h-4.5a1.5 1.5 0 0 0 0 3z"/>
+                </svg>
+            </span>
+            <span class="mnav-label">Wallet</span>
+        </a>
+        <a href="{{ route('user.profile') }}" class="mnav-item {{ request()->routeIs('user.profile') ? 'active' : '' }}">
+            <span class="mnav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4"/><path d="M4.5 20a7.5 7.5 0 0 1 15 0"/>
+                </svg>
+            </span>
+            <span class="mnav-label">Profile</span>
+        </a>
+        <a href="{{ route('user.support') }}" class="mnav-item {{ request()->routeIs('user.support') ? 'active' : '' }}">
+            <span class="mnav-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M4 14a8 8 0 0 1 16 0"/><rect x="2.8" y="13.5" width="4" height="6.5" rx="2"/><rect x="17.2" y="13.5" width="4" height="6.5" rx="2"/><path d="M19.2 20v.4a3 3 0 0 1-3 3H14"/>
+                </svg>
+            </span>
+            <span class="mnav-label">Support</span>
+        </a>
+    </nav>
+
     {{-- TOAST CONTAINER --}}
-    <div id="toastContainer"
-        style="position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;"></div>
+    <div id="toastContainer" class="toast-stack"></div>
 
     <script src="{{ asset('user/app/js/app.js') }}"></script>
     <script src="{{ asset('user/appjs/pages.js') }}"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Hamburger / sidebar toggle
-            const hamburger = document.getElementById('hamburgerBtn');
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('sidebarOverlay');
-            if (hamburger) {
-                hamburger.addEventListener('click', function() {
-                    sidebar.classList.toggle('sidebar-open');
-                    overlay.classList.toggle('active');
-                });
-            }
-            if (overlay) {
-                overlay.addEventListener('click', function() {
-                    sidebar.classList.remove('sidebar-open');
-                    overlay.classList.remove('active');
-                });
-            }
-
-            // User dropdown toggle
-            const userMenuBtn = document.getElementById('userMenuBtn');
-            const userDropdown = document.getElementById('userDropdown');
-            if (userMenuBtn && userDropdown) {
-                userMenuBtn.addEventListener('click', function(e) {
-                    e.stopPropagation();
-                    userDropdown.style.display = userDropdown.style.display === 'none' ? 'block' : 'none';
-                });
-                document.addEventListener('click', function() {
-                    userDropdown.style.display = 'none';
-                });
-            }
-        });
-    </script>
+    <script src="{{ asset('user/appjs/user-app.js') }}"></script>
     @stack('scripts')
 
     @include('partials.chatway')

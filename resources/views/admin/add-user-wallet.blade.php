@@ -34,13 +34,23 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">Wallet Type</label>
+                                    <label class="col-sm-3 col-form-label">Currency</label>
                                     <div class="col-sm-9">
-                                        <select name="type" class="form-control">
-                                            <option value="TRC20">TRC20</option>
-                                            <option value="ERC20">ERC20</option>
-                                            <option value="ETH">ETH</option>
-                                            <option value="BTC">BTC</option>
+                                        <select name="type" class="form-control" required>
+                                            @foreach (['USDT', 'BTC', 'ETH', 'USDC', 'PYUSD'] as $currency)
+                                                <option value="{{ $currency }}">{{ $currency }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Network</label>
+                                    <div class="col-sm-9">
+                                        <select name="network" class="form-control" required>
+                                            @foreach (['BTC', 'ETH', 'USDC', 'PYUSD', 'ERC20'] as $network)
+                                                <option value="{{ $network }}">{{ $network }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>

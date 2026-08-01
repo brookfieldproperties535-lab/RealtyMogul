@@ -16,7 +16,8 @@ class UserVallet extends Model
     protected $fillable = [
         'user_id',
         'vallet_address',
-        'type',
-        'phone'
+        'type',      // Currency: USDT, BTC, ETH, USDC, PYUSD
+        'network',   // Network: BTC, ETH, USDC, PYUSD, ERC20
+        'phone',
     ];
 }

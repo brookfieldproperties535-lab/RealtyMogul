@@ -55,8 +55,12 @@
                 </div>
                 <div class="wallet-meta-grid">
                     <div>
-                        <span class="wallet-meta-label">Type / Network</span>
+                        <span class="wallet-meta-label">Currency</span>
                         <div class="wallet-meta-value accent">{{ $wallet->type }}</div>
+                    </div>
+                    <div>
+                        <span class="wallet-meta-label">Network</span>
+                        <div class="wallet-meta-value accent">{{ $wallet->network ?? '—' }}</div>
                     </div>
                     <div>
                         <span class="wallet-meta-label">Phone</span>
@@ -113,17 +117,33 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="form-label">Wallet Type / Network</label>
+                        <label class="form-label">Currency</label>
                         <div class="wallet-radio-group">
-                            @foreach (['TRC20', 'ERC20', 'ETH', 'BTC'] as $type)
+                            @foreach (['USDT', 'BTC', 'ETH', 'USDC', 'PYUSD'] as $currency)
                                 <label class="wallet-radio-option">
-                                    <input type="radio" name="wallet-type" value="{{ $type }}"
-                                           {{ old('wallet-type') === $type ? 'checked' : '' }} required>
-                                    {{ $type }}
+                                    <input type="radio" name="wallet-type" value="{{ $currency }}"
+                                           {{ old('wallet-type') === $currency ? 'checked' : '' }} required>
+                                    {{ $currency }}
                                 </label>
                             @endforeach
                         </div>
                         @error('wallet-type')
+                            <div style="color:var(--danger);font-size:12px;margin-top:4px;">{{ $message }}</div>
+                        @enderror
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Network</label>
+                        <div class="wallet-radio-group">
+                            @foreach (['BTC', 'ETH', 'USDC', 'PYUSD', 'ERC20'] as $network)
+                                <label class="wallet-radio-option">
+                                    <input type="radio" name="wallet-network" value="{{ $network }}"
+                                           {{ old('wallet-network') === $network ? 'checked' : '' }} required>
+                                    {{ $network }}
+                                </label>
+                            @endforeach
+                        </div>
+                        @error('wallet-network')
                             <div style="color:var(--danger);font-size:12px;margin-top:4px;">{{ $message }}</div>
                         @enderror
                     </div>

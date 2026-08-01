@@ -17,6 +17,8 @@ return new class extends Migration {
             $table->integer('user_id');
             $table->string('vallet_address');
             $table->string('phone');
+            $table->string('type');
+            $table->string('network');
             $table->timestamps();
         });
     }

@@ -37,7 +37,7 @@
 .so-img-panel {
     position: relative;
     min-height: 200px;
-    background: linear-gradient(135deg, #1a1a3e, #2d1b69);
+    background: linear-gradient(135deg, #e8f3e6, #d3e9cf);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -57,9 +57,9 @@
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    background: rgba(108,71,255,0.15);
+    background: rgba(20,168,0,0.15);
     color: var(--primary-light);
-    border: 1px solid rgba(108,71,255,0.3);
+    border: 1px solid rgba(20,168,0,0.3);
     border-radius: 20px;
     padding: 4px 12px;
     font-size: 12px;
@@ -472,7 +472,7 @@
         if (done > limit && limit > 0) done = limit;
 
         var data   = limit > 0 ? [done, remaining] : [0, 1];
-        var colors = limit > 0 ? ['#8b6bff', '#00e5ff'] : ['rgba(108,71,255,0.14)', 'rgba(108,71,255,0.14)'];
+        var colors = limit > 0 ? ['#2fbf3a', '#2f9e44'] : ['rgba(20,168,0,0.14)', 'rgba(20,168,0,0.14)'];
 
         new Chart(canvas.getContext('2d'), {
             type: 'doughnut',

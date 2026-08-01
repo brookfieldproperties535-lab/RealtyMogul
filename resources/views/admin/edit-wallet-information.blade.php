@@ -50,13 +50,23 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label class="col-sm-3 col-form-label">Wallet Type</label>
+                                    <label class="col-sm-3 col-form-label">Currency</label>
                                     <div class="col-sm-9">
-                                        <select name="type" class="form-control">
-                                            <option value="TRC20" {{ (isset($valletInformation) && $valletInformation->type=='TRC20')? 'selected' : '' }}>TRC20</option>
-                                            <option value="ERC20" {{ (isset($valletInformation) && $valletInformation->type=='ERC20')? 'selected' : '' }}>ERC20</option>
-                                            <option value="ETH" {{ (isset($valletInformation) && $valletInformation->type=='ETH')? 'selected' : '' }}>ETH</option>
-                                            <option value="BTC" {{ (isset($valletInformation) && $valletInformation->type=='BTC')? 'selected' : '' }}>BTC</option>
+                                        <select name="type" class="form-control" required>
+                                            @foreach (['USDT', 'BTC', 'ETH', 'USDC', 'PYUSD'] as $currency)
+                                                <option value="{{ $currency }}" {{ (isset($valletInformation) && $valletInformation->type == $currency) ? 'selected' : '' }}>{{ $currency }}</option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-sm-3 col-form-label">Network</label>
+                                    <div class="col-sm-9">
+                                        <select name="network" class="form-control" required>
+                                            @foreach (['BTC', 'ETH', 'USDC', 'PYUSD', 'ERC20'] as $network)
+                                                <option value="{{ $network }}" {{ (isset($valletInformation) && $valletInformation->network == $network) ? 'selected' : '' }}>{{ $network }}</option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>

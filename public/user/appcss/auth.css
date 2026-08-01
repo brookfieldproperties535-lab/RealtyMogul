@@ -1,0 +1,106 @@
+/* ============================================================
+   REALTYMOGUL — auth.css
+   Centered login / register cards (single container, no split).
+   Reads the design tokens from style.css (green light theme).
+   ============================================================ */
+
+.auth-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 16px;
+    background:
+        radial-gradient(1100px 520px at 50% -12%, rgba(20,168,0,0.10), transparent 60%),
+        var(--dark);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    box-shadow: var(--shadow-card);
+    padding: 36px 34px;
+}
+.auth-card.wide { max-width: 480px; }
+
+/* Brand lockup */
+.auth-brand {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 22px;
+}
+
+/* Heading */
+.auth-head { text-align: center; margin-bottom: 24px; }
+.auth-head h1 { font-size: 22px; font-weight: 800; margin: 0 0 6px; letter-spacing: -0.02em; }
+.auth-head p { font-size: 13.5px; color: var(--text-muted); margin: 0; }
+
+/* Error summary + per-field errors */
+.auth-alert {
+    background: rgba(229,72,77,0.08);
+    border: 1px solid rgba(229,72,77,0.30);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    font-size: 13px;
+    color: var(--danger);
+}
+.auth-alert div + div { margin-top: 4px; }
+.field-error { color: var(--danger); font-size: 12.5px; margin-top: 6px; }
+
+/* Password field with show / hide toggle */
+.pw-field { position: relative; display: flex; align-items: center; }
+.pw-field .form-input { padding-right: 46px; }
+.pw-toggle {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--text-muted);
+    font-size: 17px;
+    line-height: 1;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: color 0.15s, transform 0.15s;
+}
+.pw-toggle:hover { color: var(--primary-light); transform: scale(1.12); }
+
+/* Remember / forgot row */
+.auth-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+.auth-remember {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: pointer;
+}
+.auth-remember input { accent-color: var(--primary); }
+.auth-link { font-size: 13px; color: var(--primary-light); font-weight: 600; }
+
+.auth-submit { width: 100%; justify-content: center; padding: 13px; }
+
+.auth-foot {
+    text-align: center;
+    margin-top: 22px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+.auth-foot a { color: var(--primary-light); font-weight: 700; }
+
+@media (max-width: 480px) {
+    .auth-card { padding: 28px 22px; }
+}
