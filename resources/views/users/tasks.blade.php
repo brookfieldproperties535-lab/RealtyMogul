@@ -88,12 +88,16 @@
                     </div>
                 </div>
                 <div class="task-card-actions">
-                    <form method="POST" action="{{ ($oneIncomplete->orderList->price > $userFunds) ? route('support') : route('submit.order') }}" style="flex:1;">
-                        @csrf
-                        <input type="hidden" name="order_id"   value="{{ $oneIncomplete->order_id }}">
-                        <input type="hidden" name="commission" value="{{ $comm }}">
-                        <button type="submit" class="btn-submit-task" style="width:100%;">✓ Submit Task</button>
-                    </form>
+                    @if ($oneIncomplete->orderList->price > $userFunds)
+                        <a href="{{ route('support') }}" class="btn-submit-task" style="width:100%;">📞 Contact Support</a>
+                    @else
+                        <form method="POST" action="{{ route('submit.order') }}" style="flex:1;">
+                            @csrf
+                            <input type="hidden" name="order_id"   value="{{ $oneIncomplete->order_id }}">
+                            <input type="hidden" name="commission" value="{{ $comm }}">
+                            <button type="submit" class="btn-submit-task" style="width:100%;">✓ Submit Task</button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>
@@ -238,12 +242,16 @@
                     </div>
                 </div>
                 <div class="task-card-actions">
-                    <form method="POST" action="{{ ($oneIncomplete->orderList->price > $userFunds) ? route('support') : route('submit.order') }}" style="flex:1;">
-                        @csrf
-                        <input type="hidden" name="order_id"   value="{{ $oneIncomplete->order_id }}">
-                        <input type="hidden" name="commission" value="{{ $comm }}">
-                        <button type="submit" class="btn-submit-task" style="width:100%;">✓ Submit Task</button>
-                    </form>
+                    @if ($oneIncomplete->orderList->price > $userFunds)
+                        <a href="{{ route('support') }}" class="btn-submit-task" style="width:100%;">📞 Contact Support</a>
+                    @else
+                        <form method="POST" action="{{ route('submit.order') }}" style="flex:1;">
+                            @csrf
+                            <input type="hidden" name="order_id"   value="{{ $oneIncomplete->order_id }}">
+                            <input type="hidden" name="commission" value="{{ $comm }}">
+                            <button type="submit" class="btn-submit-task" style="width:100%;">✓ Submit Task</button>
+                        </form>
+                    @endif
                 </div>
             </div>
         </div>

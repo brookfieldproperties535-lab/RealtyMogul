@@ -636,6 +636,9 @@ body { overflow-x: hidden; margin: 0; padding: 0; }
 }
 .btn-submit-task:hover  { opacity: 0.9; transform: translateY(-1px); }
 .btn-submit-task:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+/* when rendered as a link (e.g. "Contact Support" on an unaffordable task) */
+a.btn-submit-task { display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; text-align: center; }
+a.btn-submit-task:hover { color: #fff; }
 .btn-bookmark {
     background: var(--dark2);
     border: 1px solid var(--border);

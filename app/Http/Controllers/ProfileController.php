@@ -41,19 +41,21 @@ class ProfileController extends Controller
 
         $totalCommission = $user->funds()
             ->where('type', 'commission')
-            ->whereIn('status', ['active', 'deactive'])
+            ->where('status', 'active')
             ->sum('amount');
         $totalFunds = $totalDeposits + $totalCommission - $totalWithdrawals;
 
         // Calculate today's orders and total order value, considering only active orders
         $todayOrders = $user->orders()
             ->where('status', 'active')
+            ->whereDate('created_at', today())
             ->get();
 
         // Calculate today's commission
         $todayCommission = $user->funds()
             ->where('type', 'commission')
             ->where('status', 'active')
+            ->whereDate('created_at', today())
             ->sum('amount');
 
         $todayOrderValue = $todayOrders->sum('total_amount');
@@ -120,19 +122,21 @@ class ProfileController extends Controller
 
         $totalCommission = $user->funds()
             ->where('type', 'commission')
-            ->whereIn('status', ['active', 'deactive'])
+            ->where('status', 'active')
             ->sum('amount');
         $totalFunds = $totalDeposits + $totalCommission - $totalWithdrawals;
 
         // Calculate today's orders and total order value, considering only active orders
         $todayOrders = $user->orders()
             ->where('status', 'active')
+            ->whereDate('created_at', today())
             ->get();
 
         // Calculate today's commission
         $todayCommission = $user->funds()
             ->where('type', 'commission')
             ->where('status', 'active')
+            ->whereDate('created_at', today())
             ->sum('amount');
 
         $totalTodayOrders = $todayOrders->count(); // Count the total number of today's active orders
@@ -178,7 +182,7 @@ class ProfileController extends Controller
             $date = now()->subDays($i);
             $dayAmount = (float) $user->funds()
                 ->where('type', 'commission')
-                ->whereIn('status', ['active', 'deactive'])
+                ->where('status', 'active')
                 ->whereDate('created_at', $date->toDateString())
                 ->sum('amount');
             $weeklyEarnings[] = ['label' => $date->format('D'), 'amount' => $dayAmount];
@@ -288,7 +292,7 @@ class ProfileController extends Controller
 
         $rows = $user->funds()
             ->where('type', 'commission')
-            ->whereIn('status', ['active', 'deactive'])
+            ->where('status', 'active')
             ->whereBetween('created_at', [$start, $end])
             ->selectRaw($hourly
                 ? "DATE_FORMAT(created_at, '%Y-%m-%d %H:00:00') as bucket_key, SUM(amount) as amount"
@@ -480,7 +484,7 @@ class ProfileController extends Controller
         // Calculate the total balance using Eloquent
         $totalCommission = Funds::where('user_id', $user->id)
                                  ->where('type', 'commission')
-                                 ->whereIn('status', ['active', 'deactive'])
+                                 ->where('status', 'active')
                                  ->sum('amount');
 
         $totalDeposit = Funds::where('user_id', $user->id)
@@ -525,7 +529,7 @@ class ProfileController extends Controller
         // Calculate total funds (deposit + commission - withdrawal)
         $totalDeposits = $user->funds()->where('type', 'deposit')->whereIn('status', ['active', 'deactive'])->sum('amount');
         $totalWithdrawals = $user->funds()->where('type', 'withdrawal')->whereIn('status', ['active', 'deactive'])->sum('amount');
-        $totalCommission = $user->funds()->where('type', 'commission')->whereIn('status', ['active', 'deactive'])->sum('amount');
+        $totalCommission = $user->funds()->where('type', 'commission')->where('status', 'active')->sum('amount');
         $totalFunds = $totalDeposits + $totalCommission - $totalWithdrawals;
 
         // Initialize variables for overpriced amount and adjusted total funds
@@ -634,11 +638,15 @@ class ProfileController extends Controller
                                 ->where('status', 'active')
                                 ->count();
 
-        // Calculate the user's available balance — include deactive so reset orders don't wipe balance
+        // Calculate the user's available balance — include deactive deposits, but only active commissions
         $availableBalance = Funds::where('user_id', $userId)
-                                ->whereIn('type', ['commission', 'deposit'])
+                                ->where('type', 'deposit')
                                 ->whereIn('status', ['active', 'deactive'])
                                 ->sum('amount')
+                            + Funds::where('user_id', $userId)
+                                    ->where('type', 'commission')
+                                    ->where('status', 'active')
+                                    ->sum('amount')
                             - Funds::where('user_id', $userId)
                                     ->where('type', 'withdrawal')
                                     ->whereIn('status', ['active', 'deactive'])

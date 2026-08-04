@@ -65,7 +65,7 @@
 
     $totalCommission = Funds::where('user_id', $uid)
         ->where('type', 'commission')
-        ->whereIn('status', ['active', 'deactive'])
+        ->where('status', 'active')
         ->sum('amount');
 
     $totalWithdrawals = Funds::where('user_id', $uid)
@@ -92,7 +92,8 @@
     // Withdrawal-specific stats for the history cards
     $totalWithdrawn = Funds::where('user_id', $uid)
         ->where('type', 'withdrawal')
-        ->sum('amount');                                    // all ever requested
+        ->where('status', 'active')
+        ->sum('amount');                                    // active (approved) withdrawals only
 
     $totalPending = Funds::where('user_id', $uid)
         ->where('type', 'withdrawal')

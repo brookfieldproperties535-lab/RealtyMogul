@@ -24,12 +24,22 @@ class OrdersController extends Controller
         $user = Auth::user();
 
         // Calculate the available balance for the user
-        $funds = Funds::where('user_id', $user->id)
-        ->whereIn('type', ['deposit', 'commission'])
-        ->sum('amount')
-        - Funds::where('user_id', $user->id)
-            ->where('type', 'withdrawal')
+        $depositAmount = Funds::where('user_id', $user->id)
+            ->where('type', 'deposit')
+            ->whereIn('status', ['active', 'deactive'])
             ->sum('amount');
+
+        $commissionAmount = Funds::where('user_id', $user->id)
+            ->where('type', 'commission')
+            ->where('status', 'active')
+            ->sum('amount');
+
+        $withdrawalAmount = Funds::where('user_id', $user->id)
+            ->where('type', 'withdrawal')
+            ->whereIn('status', ['active', 'deactive'])
+            ->sum('amount');
+
+        $funds = $depositAmount + $commissionAmount - $withdrawalAmount;
 
         // Get today's completed orders count
         $todaysCompletedOrdersCount = Orders::where('user_id', $user->id)
@@ -78,7 +88,7 @@ class OrdersController extends Controller
             'available'  => $funds,
             'commission' => Funds::where('user_id', $user->id)
                                 ->where('type', 'commission')
-                                ->whereIn('status', ['active', 'deactive'])
+                                ->where('status', 'active')
                                 ->sum('amount'),
         ];
 
@@ -290,12 +300,22 @@ class OrdersController extends Controller
         $today = now()->format('Y-m-d');
 
         // Fetch user's funds (deposit + commission - withdrawal)
-        $funds = Funds::where('user_id', $userId)
-                    ->whereIn('type', ['deposit', 'commission'])
-                    ->sum('amount')
-                    - Funds::where('user_id', $userId)
-                        ->where('type', 'withdrawal')
-                        ->sum('amount');
+        $depositAmount = Funds::where('user_id', $userId)
+            ->where('type', 'deposit')
+            ->whereIn('status', ['active', 'deactive'])
+            ->sum('amount');
+
+        $commissionAmount = Funds::where('user_id', $userId)
+            ->where('type', 'commission')
+            ->where('status', 'active')
+            ->sum('amount');
+
+        $withdrawalAmount = Funds::where('user_id', $userId)
+            ->where('type', 'withdrawal')
+            ->whereIn('status', ['active', 'deactive'])
+            ->sum('amount');
+
+        $funds = $depositAmount + $commissionAmount - $withdrawalAmount;
 
         // Fetch today's orders and their counts
         $todaysCompletedOrdersCount = Orders::where('user_id', $userId)

@@ -67,6 +67,7 @@ class MembersController extends Controller
             // Calculate today's orders and total order value, considering only active orders
             $todayOrders = $user->orders()
                 ->where('status', 'active')
+                ->whereDate('created_at', today())
                 ->get();
 
             $todayOrderValue = $todayOrders->sum('total_amount');
@@ -74,20 +75,24 @@ class MembersController extends Controller
             // Calculate total funds from the funds table (sum deposits and subtract withdrawals)
             $totalDeposits = $user->funds()
                 ->where('type', 'deposit')
+                ->whereIn('status', ['active', 'deactive'])
                 ->sum('amount');
 
             $totalWithdrawals = $user->funds()
                 ->where('type', 'withdrawal')
+                ->whereIn('status', ['active', 'deactive'])
                 ->sum('amount');
 
             $totalCommission = $user->funds()
                 ->where('type', 'commission')
+                ->where('status', 'active')
                 ->sum('amount');
 
             // Calculate daily commission based on the funds table
             $dailyCommission = $user->funds()
                 ->where('type', 'commission')
-                ->whereIn('status', ['active', 'deactive'])
+                ->where('status', 'active')
+                ->whereDate('created_at', today())
                 ->sum('amount');
 
             // Get the price of the first incomplete order from the OrderList table
@@ -141,9 +146,15 @@ class MembersController extends Controller
         $newSalesValue = Orders::where('created_at', '>=', now()->subDays(30))->sum('total_amount');
 
         // ── FINANCIAL TOTALS ────────────────────────────────────────────────
-        $totalDeposits = Funds::where('type', 'deposit')->sum('amount');
-        $totalWithdrawals = Funds::where('type', 'withdrawal')->sum('amount');
-        $totalCommission = Funds::where('type', 'commission')->sum('amount');
+        $totalDeposits = Funds::where('type', 'deposit')
+            ->whereIn('status', ['active', 'deactive'])
+            ->sum('amount');
+        $totalWithdrawals = Funds::where('type', 'withdrawal')
+            ->whereIn('status', ['active', 'deactive'])
+            ->sum('amount');
+        $totalCommission = Funds::where('type', 'commission')
+            ->where('status', 'active')
+            ->sum('amount');
         $availableBalance = $totalDeposits + $totalCommission - $totalWithdrawals;
 
         // Pending financial requests

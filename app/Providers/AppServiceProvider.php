@@ -48,9 +48,18 @@ class AppServiceProvider extends ServiceProvider
             // Skip querying the `notifications` table for now (may not exist in DB)
             $notificationsCount = 0;
 
-            $totalCommission = Funds::where('user_id', $user->id)->where('type', 'commission')->whereIn('status', ['active', 'deactive'])->sum('amount');
-            $totalDeposit    = Funds::where('user_id', $user->id)->where('type', 'deposit')    ->whereIn('status', ['active', 'deactive'])->sum('amount');
-            $totalWithdraw   = Funds::where('user_id', $user->id)->where('type', 'withdrawal') ->whereIn('status', ['active', 'deactive'])->sum('amount');
+            $totalCommission = Funds::where('user_id', $user->id)
+                ->where('type', 'commission')
+                ->where('status', 'active')
+                ->sum('amount');
+            $totalDeposit    = Funds::where('user_id', $user->id)
+                ->where('type', 'deposit')
+                ->whereIn('status', ['active', 'deactive'])
+                ->sum('amount');
+            $totalWithdraw   = Funds::where('user_id', $user->id)
+                ->where('type', 'withdrawal')
+                ->whereIn('status', ['active', 'deactive'])
+                ->sum('amount');
 
             // Follow ProfileController::index logic: totalFunds = deposits + commission - withdrawals
             $totalFunds = $totalDeposit + $totalCommission - $totalWithdraw;
