@@ -29,6 +29,11 @@
             </div>
         @endif
 
+        {{-- Shown when "Forgot password?" is clicked (handled in auth.js) --}}
+        <div id="forgotNote" class="auth-note" role="status" hidden>
+            Please contact support to reset your password.
+        </div>
+
         <form method="POST" action="{{ route('login') }}">
             @csrf
 
@@ -54,9 +59,7 @@
                 <label class="auth-remember">
                     <input type="checkbox" name="remember"> Remember me
                 </label>
-                @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="auth-link">Forgot password?</a>
-                @endif
+                <a href="#" id="forgotPassword" class="auth-link">Forgot password?</a>
             </div>
 
             <button type="submit" class="btn btn-primary auth-submit">Sign In →</button>

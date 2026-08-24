@@ -61,58 +61,9 @@
             });
         }
 
-        /* ── Lift the Chatway launcher above the mobile bottom-nav ──
-           The widget loads async and gives its element no predictable
-           id/class, so we locate it structurally: a fixed-positioned
-           element pinned to the bottom-right corner that isn't one of
-           our own UI pieces. Then we offset it on mobile. */
-        var LIFT = 82;          // px above the bar
-        var OURS = '.mobile-nav, .notif-popup, .flash-stack, .toast-stack';
-
-        function findCornerWidget() {
-            // Try obvious Chatway hooks first
-            var known = document.querySelector('iframe[src*="chatway"], div[id*="chatway" i]:not(#chatway), div[class*="chatway" i]');
-            if (known) {
-                var node = known;
-                for (var k = 0; k < 4 && node; k++) {
-                    if (getComputedStyle(node).position === 'fixed') return node;
-                    node = node.parentElement;
-                }
-                return known;
-            }
-            // Heuristic: any fixed element hugging the bottom-right that isn't ours
-            var all = document.body ? document.body.getElementsByTagName('*') : [];
-            for (var i = 0; i < all.length; i++) {
-                var el = all[i];
-                if (el.closest && el.closest(OURS)) continue;
-                if (getComputedStyle(el).position !== 'fixed') continue;
-                var r = el.getBoundingClientRect();
-                if (r.width < 30 || r.width > 440 || r.height < 30) continue;
-                if ((window.innerHeight - r.bottom) < 150 && (window.innerWidth - r.right) < 150) {
-                    return el;
-                }
-            }
-            return null;
-        }
-
-        var widget = null;
-        function positionChatway() {
-            if (!widget || !document.body.contains(widget)) widget = findCornerWidget();
-            if (!widget) return false;
-            widget.style.setProperty('transition', 'bottom 0.2s ease');
-            if (window.matchMedia('(max-width: 900px)').matches) {
-                widget.style.setProperty('bottom', LIFT + 'px', 'important');
-            } else {
-                widget.style.removeProperty('bottom');
-            }
-            return true;
-        }
-
-        var cwTries = 0;
-        var cwTimer = setInterval(function () {
-            positionChatway();
-            if (++cwTries > 40) clearInterval(cwTimer);   // stop polling after ~20s
-        }, 500);
-        window.addEventListener('resize', positionChatway);
+        /* NOTE: the live-chat widget (LiveChat) manages its own position.
+           We do NOT touch it from JS — an earlier heuristic that mutated a
+           bottom-right fixed element broke the widget on app pages. Any
+           mobile offset above the bottom-nav is handled in CSS only. */
     });
 })();

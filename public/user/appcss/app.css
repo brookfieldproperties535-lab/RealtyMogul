@@ -177,7 +177,7 @@ a.mnav-item.active:hover {
     /* lift the bottom-right floaters above the bar */
     .flash-stack,
     .toast-stack { bottom: 84px; }
-    /* best-effort CSS fallback (JS in user-app.js does the reliable nudge) */
-    iframe[src*="chatway"],
-    #chatway-container { bottom: 80px !important; }
+    /* Lift the LiveChat launcher above the bottom-nav on mobile (CSS only,
+       safe — it only sets a value, never strips the widget's positioning). */
+    #chat-widget-container { bottom: 74px !important; }
 }

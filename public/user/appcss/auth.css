@@ -53,6 +53,19 @@
 .auth-alert div + div { margin-top: 4px; }
 .field-error { color: var(--danger); font-size: 12.5px; margin-top: 6px; }
 
+/* Support notice shown when "Forgot password?" is clicked */
+.auth-note {
+    background: rgba(20,168,0,0.08);
+    border: 1px solid rgba(20,168,0,0.30);
+    border-radius: var(--radius-sm);
+    padding: 12px 14px;
+    margin-bottom: 18px;
+    font-size: 13px;
+    color: var(--primary-dark);
+    line-height: 1.5;
+}
+.auth-note[hidden] { display: none; }
+
 /* Password field with show / hide toggle */
 .pw-field { position: relative; display: flex; align-items: center; }
 .pw-field .form-input { padding-right: 46px; }

@@ -451,7 +451,8 @@
                     // When no limit is set, show a full neutral track so the gauge still reads cleanly.
                     var data = limit > 0 ? [done, remaining] : [0, 1];
                     var colors = limit > 0 ? ['#2fbf3a', '#2f9e44'] : ['rgba(20,168,0,0.14)',
-                    'rgba(20,168,0,0.14)'];
+                        'rgba(20,168,0,0.14)'
+                    ];
 
                     var chart = new Chart(ctx, {
                         type: 'doughnut',
