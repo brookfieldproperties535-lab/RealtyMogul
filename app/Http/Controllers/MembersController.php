@@ -27,8 +27,10 @@ class MembersController extends Controller
         // Get the currently logged-in user
         $loggedInUser = auth()->user();
 
-        // Initialize the query to fetch users with related data
-        $query = User::with(['membershipLevel', 'funds', 'orders'])->orderBy('id', 'desc');
+        // Eager-load only what each row actually reads (membership + parent name).
+        // The old with(['funds','orders']) was wasted: the loop below called the
+        // relationship methods (->funds()/->orders()), which re-query the DB.
+        $query = User::with(['membershipLevel', 'parent'])->orderBy('id', 'desc');
 
         // If the logged-in user is a moderator, restrict the query to only their children
         // if ($loggedInUser->user_type == 2) { // Assuming 2 is the user_type for moderators
@@ -62,64 +64,80 @@ class MembersController extends Controller
 
         // Fetch the users according to the query
         $users = $query->get();
+        $ids = $users->pluck('id');
 
-        $userData = $users->map(function ($user) {
-            // Calculate today's orders and total order value, considering only active orders
-            $todayOrders = $user->orders()
-                ->where('status', 'active')
-                ->whereDate('created_at', today())
-                ->get();
-
-            $todayOrderValue = $todayOrders->sum('total_amount');
-
-            // Calculate total funds from the funds table (sum deposits and subtract withdrawals)
-            $totalDeposits = $user->funds()
-                ->where('type', 'deposit')
-                ->whereIn('status', ['active', 'deactive'])
-                ->sum('amount');
-
-            $totalWithdrawals = $user->funds()
-                ->where('type', 'withdrawal')
-                ->whereIn('status', ['active', 'deactive'])
-                ->sum('amount');
-
-            $totalCommission = $user->funds()
-                ->where('type', 'commission')
-                ->where('status', 'active')
-                ->sum('amount');
-
-            // Calculate daily commission based on the funds table
-            $dailyCommission = $user->funds()
-                ->where('type', 'commission')
-                ->where('status', 'active')
-                ->whereDate('created_at', today())
-                ->sum('amount');
-
-            // Get the price of the first incomplete order from the OrderList table
-            $firstIncompleteOrderPrice = $user->orders()
-                ->where('type', 'Incomplete')
-                ->where('status', 'active')
-                ->orderBy('created_at', 'asc')
-                ->with('orderList') // Ensure the OrderList relationship is loaded
-                ->first()?->orderList->price; // Access the price from the related OrderList model
-
-            // Calculate total funds, subtracting the price of the first incomplete order if it exists
-            $totalFunds = $totalDeposits + $totalCommission - $totalWithdrawals;
-
-            if ($firstIncompleteOrderPrice) {
-                $totalFunds -= $firstIncompleteOrderPrice;
+        // ── Per-user totals in a handful of grouped queries ─────────────────
+        // (was ~8 queries per user → ~1000 for 108 users → nginx 504 on live).
+        // Each helper returns a collection keyed by user_id.
+        $sumFunds = function (string $type, array $statuses, bool $todayOnly = false) use ($ids) {
+            $q = Funds::whereIn('user_id', $ids)
+                ->where('type', $type)
+                ->whereIn('status', $statuses);
+            if ($todayOnly) {
+                $q->whereDate('created_at', today());
             }
+
+            return $q->groupBy('user_id')
+                ->selectRaw('user_id, SUM(amount) as total')
+                ->pluck('total', 'user_id');
+        };
+
+        $deposits    = $sumFunds('deposit',    ['active', 'deactive']);
+        $withdrawals = $sumFunds('withdrawal', ['active', 'deactive']);
+        $commission  = $sumFunds('commission', ['active']);            // commission: active only
+        $dailyComm   = $sumFunds('commission', ['active'], true);      // today's active commission
+
+        // Today's active order value, and active order count — grouped per user.
+        $todayOrderValue = Orders::whereIn('user_id', $ids)
+            ->where('status', 'active')
+            ->whereDate('created_at', today())
+            ->groupBy('user_id')
+            ->selectRaw('user_id, SUM(total_amount) as total')
+            ->pluck('total', 'user_id');
+
+        $activeOrderCount = Orders::whereIn('user_id', $ids)
+            ->where('status', 'active')
+            ->groupBy('user_id')
+            ->selectRaw('user_id, COUNT(*) as c')
+            ->pluck('c', 'user_id');
+
+        // Oldest incomplete active order's price, per user (normally ≤ 1 per user).
+        $firstIncompletePrice = [];
+        Orders::whereIn('user_id', $ids)
+            ->where('type', 'Incomplete')
+            ->where('status', 'active')
+            ->with('orderList:id,price')
+            ->orderBy('created_at', 'asc')
+            ->get()
+            ->each(function ($o) use (&$firstIncompletePrice) {
+                if (!array_key_exists($o->user_id, $firstIncompletePrice)) {
+                    $firstIncompletePrice[$o->user_id] = (float) optional($o->orderList)->price;
+                }
+            });
+
+        // ── Map each user to its display row — no per-user queries here ─────
+        $userData = $users->map(function ($user) use (
+            $deposits, $withdrawals, $commission, $dailyComm,
+            $todayOrderValue, $activeOrderCount, $firstIncompletePrice
+        ) {
+            $totalDeposits    = (float) ($deposits[$user->id] ?? 0);
+            $totalWithdrawals = (float) ($withdrawals[$user->id] ?? 0);
+            $totalCommission  = (float) ($commission[$user->id] ?? 0);
+            $incPrice         = (float) ($firstIncompletePrice[$user->id] ?? 0);
+
+            $balance   = $totalDeposits + $totalCommission - $totalWithdrawals;
+            $available = $balance - $incPrice;
 
             return [
                 'user' => $user,
                 'membership_level' => $user->membershipLevel,
-                'total_order_limit' => $user->membershipLevel->order_limit,
-                'processed_orders_count' => $user->orders()->where('status', 'active')->count(),
-                'today_order_value' => $todayOrderValue,
-                'balance' => $totalDeposits + $totalCommission - $totalWithdrawals,
-                'available' => $totalFunds,
-                'daily_commission' => $dailyCommission,
-                'commission_percent' => $user->membershipLevel->commission,
+                'total_order_limit' => $user->membershipLevel->order_limit ?? 0,
+                'processed_orders_count' => (int) ($activeOrderCount[$user->id] ?? 0),
+                'today_order_value' => (float) ($todayOrderValue[$user->id] ?? 0),
+                'balance' => $balance,
+                'available' => $available,
+                'daily_commission' => (float) ($dailyComm[$user->id] ?? 0),
+                'commission_percent' => $user->membershipLevel->commission ?? 0,
                 'parent_name' => $user->parent ? $user->parent->name : 'N/A',
                 'last_login' => $user->updated_at,
             ];
