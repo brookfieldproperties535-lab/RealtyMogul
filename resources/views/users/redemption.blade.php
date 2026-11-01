@@ -92,6 +92,30 @@
         </div>
     </div>
 
+@elseif (empty($hasWallet))
+
+    {{-- No linked wallet — withdrawals need a wallet to pay out to --}}
+    <div style="max-width:560px;margin:40px auto;">
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title"><span class="icon">📤</span> Withdrawal</div>
+                <span class="status-badge status-pending">No Wallet</span>
+            </div>
+            <div class="card-body" style="text-align:center;padding:36px 28px;">
+                <div style="font-size:40px;margin-bottom:14px;">💳</div>
+                <h3 style="font-size:17px;font-weight:700;color:var(--text);margin:0 0 10px;">Add Your Wallet Information First</h3>
+                <p style="font-size:13.5px;color:var(--text-muted);line-height:1.7;margin:0 0 22px;">
+                    You haven't linked a wallet yet. Please add your wallet information
+                    before requesting a withdrawal.
+                </p>
+                <a href="{{ route('wallet-information') }}" class="btn btn-primary"
+                   style="display:inline-flex;align-items:center;justify-content:center;gap:8px;">
+                    🔗 Add Wallet Information
+                </a>
+            </div>
+        </div>
+    </div>
+
 @else
 
 {{-- BALANCE SUMMARY BAR --}}

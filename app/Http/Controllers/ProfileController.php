@@ -431,11 +431,12 @@ class ProfileController extends Controller
 
     public function storeWalletInformation(Request $request)
     {
-        // Checkpoint: deactive wallets cannot save wallet information. The view
-        // hides the form, but this guard stops direct POSTs to the endpoint too.
-        if (Auth::user()->wallet_status !== 'active') {
+        // Checkpoint: when both wallet and withdraw statuses are deactive, wallet
+        // information cannot be saved. The view hides the form, but this guard
+        // stops direct POSTs to the endpoint too.
+        if (Auth::user()->isWalletInfoLocked()) {
             return redirect()->route('wallet-information')
-                ->with('error', 'Your wallet status is deactive. Please contact support and pay the activation fee to add wallet information.');
+                ->with('error', 'Your wallet and withdrawal status are deactive. Please contact support and pay the activation fee to add wallet information.');
         }
 
         $request->validate([
@@ -562,7 +563,9 @@ class ProfileController extends Controller
 
         $membership = $user->membershipLevel;
 
-        return view('users.redemption', compact('adjustedTotalFunds', 'overpricedAmount', 'todaysOrdersCount', 'membership'));
+        $hasWallet = UserVallet::where('user_id', $user->id)->exists();
+
+        return view('users.redemption', compact('adjustedTotalFunds', 'overpricedAmount', 'todaysOrdersCount', 'membership', 'hasWallet'));
     }
 
     public function logout()
@@ -631,6 +634,10 @@ class ProfileController extends Controller
         // hides the form, but this guard stops direct POSTs to the endpoint too.
         if (($user->withdraw_status ?? '') === 'deactive') {
             return redirect()->back()->with('error', 'Your withdrawal status is deactive. Please connect with the support assistant to get it activated.');
+        }
+        // Checkpoint: a withdrawal needs a linked wallet to pay out to.
+        if (!UserVallet::where('user_id', $userId)->exists()) {
+            return redirect()->route('wallet-information')->with('error', 'Please add your wallet information before requesting a withdrawal.');
         }
         // Count only COMPLETED orders — Incomplete orders do not count toward the limit
         $todaysOrdersCount = Orders::where('user_id', $userId)

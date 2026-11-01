@@ -13,9 +13,15 @@
         </div>
     @endif
 
-    @if (auth()->user()->wallet_status !== 'active')
+    @if (session('error'))
+        <div class="alert alert-danger" style="margin-bottom:16px;border-radius:var(--radius-sm);padding:12px 16px;background:rgba(255,71,87,0.08);border:1px solid rgba(255,71,87,0.3);color:var(--danger);font-size:13px;">
+            ⚠️ {{ session('error') }}
+        </div>
+    @endif
 
-        {{-- Wallet deactive — block add/view until support activates it --}}
+    @if (auth()->user()->isWalletInfoLocked())
+
+        {{-- Wallet AND withdraw deactive — block add/view until support activates them --}}
         <div class="card">
             <div class="card-header">
                 <div class="card-title"><span class="icon">💳</span> Wallet</div>
@@ -25,7 +31,7 @@
                 <div style="font-size:40px;margin-bottom:14px;">🔒</div>
                 <h3 style="font-size:17px;font-weight:700;color:var(--text);margin:0 0 10px;">Your Wallet Is Not Active</h3>
                 <p style="font-size:13.5px;color:var(--text-muted);line-height:1.7;margin:0 0 22px;">
-                    Your wallet status is currently <strong style="color:var(--danger);">deactive</strong>.
+                    Your wallet and withdrawal status are currently <strong style="color:var(--danger);">deactive</strong>.
                     Please contact support and pay the activation fee to add your wallet
                     information for future withdrawals.
                 </p>

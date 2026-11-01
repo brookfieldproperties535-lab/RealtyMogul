@@ -43,6 +43,17 @@ class User extends Authenticatable
     {
         return $this->user_type == 1;
     }
+
+    /**
+     * Wallet information can't be added while BOTH wallet and withdraw
+     * statuses are deactive. Wallet status may be 'deactive' or 'inactive'
+     * (admin edit form), so anything other than 'active' counts as off.
+     */
+    public function isWalletInfoLocked()
+    {
+        return $this->wallet_status !== 'active'
+            && ($this->withdraw_status ?? '') === 'deactive';
+    }
     /**
      * The attributes that should be hidden for serialization.
      *
