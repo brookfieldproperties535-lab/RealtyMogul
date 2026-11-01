@@ -316,6 +316,7 @@ class MembersController extends Controller
         $members->max_withdraw = $request->input('max_withdraw');
         $members->user_type = $request->input('userType') ?? 0;
         $members->status = 'active';
+        $members->wallet_status = 'active';
         $members->withdraw_status = $request->input('withdraw_status', 'active');
         $members->save();
 

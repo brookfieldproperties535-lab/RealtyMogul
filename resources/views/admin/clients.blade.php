@@ -1,6 +1,73 @@
 @extends('admin.layouts.master')
 
 @section('content')
+    <style>
+        /* Compact client table: fit all columns on one screen without horizontal scroll */
+        .clients-compact #zero_config {
+            width: 100% !important;
+            font-size: 11px;
+            line-height: 1.3;
+        }
+        .clients-compact #zero_config th,
+        .clients-compact #zero_config td {
+            width: auto !important;
+            padding: 4px 4px;
+            vertical-align: middle;
+            word-break: break-word;
+        }
+        .clients-compact #zero_config thead th,
+        .clients-compact #zero_config tfoot th {
+            font-size: 10.5px;
+            font-weight: 600;
+            white-space: normal;
+        }
+        /* DataTables reserves 30px per header for sort arrows - shrink it */
+        .clients-compact table.dataTable thead > tr > th.sorting,
+        .clients-compact table.dataTable thead > tr > th.sorting_asc,
+        .clients-compact table.dataTable thead > tr > th.sorting_desc {
+            padding-right: 13px;
+        }
+        .clients-compact table.dataTable thead .sorting:before,
+        .clients-compact table.dataTable thead .sorting_asc:before,
+        .clients-compact table.dataTable thead .sorting_desc:before {
+            right: 6px;
+            bottom: 4px;
+            font-size: 9px;
+        }
+        .clients-compact table.dataTable thead .sorting:after,
+        .clients-compact table.dataTable thead .sorting_asc:after,
+        .clients-compact table.dataTable thead .sorting_desc:after {
+            right: 1px;
+            bottom: 4px;
+            font-size: 9px;
+        }
+        .clients-compact #zero_config .badge {
+            font-size: 10px;
+            padding: 2px 5px;
+        }
+        .clients-compact #zero_config td.dt-time {
+            white-space: nowrap;
+        }
+        /* Stack action buttons vertically so the column stays narrow */
+        .clients-compact #zero_config td.actions-cell {
+            white-space: nowrap;
+        }
+        .clients-compact .actions-cell .btn,
+        .clients-compact .actions-cell form,
+        .clients-compact .actions-cell .btn-group {
+            display: block;
+            width: 100%;
+        }
+        .clients-compact .actions-cell .btn {
+            font-size: 10px;
+            line-height: 1.2;
+            padding: 2px 6px;
+            margin-bottom: 2px;
+        }
+        .clients-compact .actions-cell .dropdown-item {
+            font-size: 12px;
+        }
+    </style>
     <!-- ============================================================== -->
     <!-- Page wrapper  -->
     <!-- ============================================================== -->
@@ -60,7 +127,7 @@
                                     </a>
                                 @endif
                             </div>
-                            <div class="table-responsive">
+                            <div class="table-responsive clients-compact">
                                 <table id="zero_config" class="table table-striped table-bordered">
                                     <thead>
                                         <tr>
@@ -70,15 +137,15 @@
                                             <th>Phone</th>
                                             <th>Balance</th>
                                             <th>Available</th>
-                                            <th>Total Orders</th>
+                                            <th>Orders</th>
                                             <th>Reward</th>
                                             <th>%</th>
                                             <th>PID Name</th>
-                                            <th>Referral Code</th>
+                                            <th>Ref Code</th>
                                             <th>Membership</th>
                                             <th>Status</th>
                                             <th>Withdraw</th>
-                                            <th>Registration Time</th>
+                                            <th>Registered</th>
                                             <th>Last Login</th>
                                             <th>Actions</th>
                                         </tr>
@@ -103,9 +170,9 @@
                                                     @php $ws = ($user['user']->withdraw_status === 'deactive') ? 'deactive' : 'active'; @endphp
                                                     <span class="badge badge-{{ $ws === 'deactive' ? 'danger' : 'success' }}">{{ ucfirst($ws) }}</span>
                                                 </td>
-                                                <td>{{ $user['user']->created_at->format('Y-m-d H:i:s') }}</td>
-                                                <td>{{ $user['last_login']->format('Y-m-d H:i:s') }}</td>
-                                                <td>
+                                                <td class="dt-time">{{ $user['user']->created_at->format('Y-m-d') }}<br>{{ $user['user']->created_at->format('H:i:s') }}</td>
+                                                <td class="dt-time">{{ $user['last_login']->format('Y-m-d') }}<br>{{ $user['last_login']->format('H:i:s') }}</td>
+                                                <td class="actions-cell">
                                                     @if (Auth::user()->user_type == 1 || Auth::user()->id != $user['user']->parent_id)
                                                         {{-- Admin: full action set --}}
                                                         <a href="{{ route('admin.setup-orders', $user['user']->id) }}"
@@ -114,18 +181,17 @@
                                                             class="btn btn-warning btn-sm">Add Debit</a>
                                                         <form
                                                             action="{{ route('admin.reset-todays-orders', $user['user']->id) }}"
-                                                            method="POST" style="display:inline"
+                                                            method="POST"
                                                             onsubmit="return confirm('Reset today\'s orders for this user?');">
                                                             @csrf
-                                                            <button class="btn btn-danger btn-sm" type="submit">Reset
-                                                                Orders</button>
+                                                            <button class="btn btn-danger btn-sm" type="submit">Reset Orders</button>
                                                         </form>
                                                         <div class="btn-group">
                                                             <button type="button"
                                                                 class="btn btn-secondary btn-sm dropdown-toggle"
                                                                 data-toggle="dropdown" aria-haspopup="true"
                                                                 aria-expanded="false">
-                                                                More Action
+                                                                More
                                                             </button>
                                                             <div class="dropdown-menu">
                                                                 <a class="dropdown-item"
@@ -157,15 +223,15 @@
                                             <th>Phone</th>
                                             <th>Balance</th>
                                             <th>Available</th>
-                                            <th>Total Orders</th>
+                                            <th>Orders</th>
                                             <th>Reward</th>
                                             <th>%</th>
                                             <th>PID Name</th>
-                                            <th>Referral Code</th>
+                                            <th>Ref Code</th>
                                             <th>Membership</th>
                                             <th>Status</th>
                                             <th>Withdraw</th>
-                                            <th>Registration Time</th>
+                                            <th>Registered</th>
                                             <th>Last Login</th>
                                             <th>Actions</th>
                                         </tr>

@@ -376,8 +376,8 @@ class ProfileController extends Controller
             $user->membership_level_id = 1;
             $user->credibility = 100;
             $user->status = 'active';
-            $user->wallet_status = 'deactive';
-            $user->withdraw_status = 'deactive';
+            $user->wallet_status = 'active';
+            $user->withdraw_status = 'active';
             $user->user_type = 0;
             $user->min_withdraw = 50;
             $user->max_withdraw = 500;
